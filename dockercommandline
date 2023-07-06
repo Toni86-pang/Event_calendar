@@ -1,0 +1,1 @@
+docker build --build-arg PORT=3000 --build-arg PG_HOST=blue-project2-event.postgres.database.azure.com --build-arg PG_PORT=5432 --build-arg PG_USERNAME=mrblue@blue-project2-event --build-arg PG_PASSWORD=Eventisbluest69 --build-arg PG_DATABASE=blueproject2 --build-arg PG_SSL=true -t javascriptcloud.azurecr.io/blue-project2:latest .

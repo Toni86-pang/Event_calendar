@@ -2,6 +2,8 @@ import pg from 'pg'
 
 const { PG_HOST, PG_PORT, PG_USERNAME, PG_PASSWORD, PG_DATABASE, PG_SSL } = process.env
 
+console.log(PG_HOST, PG_PORT, PG_USERNAME, PG_PASSWORD, PG_DATABASE, PG_SSL)
+
 const pool = new pg.Pool({
     host: PG_HOST,
     port: Number(PG_PORT),
