@@ -6,7 +6,7 @@ const server = express()
 server.use('/', express.static('./dist/client'))
 
 server.get('/version', (req: Request, res: Response) => {
-    res.send('Server version 0.1')
+    res.send('Server version 0.2')
 })
 
 server.get('/events', async (req: Request, res: Response) => {
