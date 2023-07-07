@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
+import server from './server'
 import { getEvents} from './dao'
 
-const server = express()
 
 server.use('/', express.static('./dist/client'))
 
