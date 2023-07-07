@@ -5,7 +5,7 @@ import server from './server'
 server.use('/', express.static('./dist/client'))
 
 server.get('/version', (req: Request, res: Response) => {
-	res.send('Server version 0.2.5.2')
+	res.send('Server version 0.2.6')
 })
 
 const PORT = process.env.PORT

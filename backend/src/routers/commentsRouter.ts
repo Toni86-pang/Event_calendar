@@ -8,7 +8,7 @@ interface CustomRequest extends Request {
 
 interface Comment {
 	event_id: number
-	users_id: number | null | undefined
+	users_id: number
 	comment: string
 	commentdate: string
 }
@@ -28,7 +28,7 @@ commentsRouter.post('/', async (req: CustomRequest, res: Response) => {
 
 
 // Get comment by event id
-commentsRouter.get('/', async (req: CustomRequest, res: Response) => {
+commentsRouter.get('/:eventId', async (req: CustomRequest, res: Response) => {
 	const commentId = req.params.eventId
 	const comment: Comment[] = await getCommentByEventId(commentId)
 
