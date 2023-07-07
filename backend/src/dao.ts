@@ -9,9 +9,8 @@ interface User {
 
 // User
 export const addUser = async (username: string, password_hash: string) => {
-	const createUser = query.addUser
 	const params = [username, password_hash]
-	const result = await executeQuery(createUser, params)
+	const result = await executeQuery(query.addUser, params)
 	const user: User = { username, password_hash }
 	const id = result.rows[0].user_id
 	user.user_id = id
