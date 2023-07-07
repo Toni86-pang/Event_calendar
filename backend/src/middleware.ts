@@ -7,6 +7,7 @@ interface CustomRequest extends Request {
   user_id?: number
 }
 
+
 export const unknownEndpoint = (_req: Request, res: Response) => {
 	res.status(404).send({ error: 'Page not found!' })
 }
@@ -36,6 +37,20 @@ export const authenticate = async (req: CustomRequest, res: Response, next: Next
 	} catch (error) {
 		return res.status(401).send('Invalid token')
 	}
+}
+
+export const validatePostEvent = async (req: CustomRequest, res: Response, next: NextFunction) => {
+	const user_id = req.user_id
+	if(!req.logged_in || !user_id) {
+		res.status(401).send()
+	}
+	const { title, content, isPrivate, date, time } = req.body
+	if (!title || !content || isPrivate===undefined || !date || !time) {
+		return res.status(400).send('Invalid')
+	}
+	
+	next()
+
 }
 
 

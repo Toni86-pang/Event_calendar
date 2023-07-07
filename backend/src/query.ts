@@ -10,10 +10,12 @@ const eventsByUserId = 'SELECT title, content, private, date_time FROM events WH
 const eventsById = 'SELECT user_id, title, content, private, date_time FROM events WHERE event_id = $1;'
 const deleteEventById = 'DELETE FROM events WHERE event_id = $1;'
 const deleteCommentsInEvent = 'DELETE FROM comments WHERE event_id = $1'
+const addEvent = 'INSERT INTO events (user_id, title, content, private, date_time) VALUES ($1, $2, $3, $4, $5) RETURNING *;'
 
 // Comments
 const postComment = 'INSERT INTO comments (event_id, user_id, comment, commentdate) VALUES ($1, $2, $3, current_timestamp);'
 const getCommentByEventId = 'SELECT user_id, comment, commentdate FROM comments WHERE event_id = $1;'
+
 
 
 export default {
@@ -27,4 +29,5 @@ export default {
 	deleteCommentsInEvent,
 	getCommentByEventId,
 	postComment,
+	addEvent
 }
