@@ -8,6 +8,7 @@ build:
     - docker:dind
   script:
     - docker build
+      --build-arg SECRET="$SECRET"
       --build-arg PORT="$APP_PORT"
       --build-arg PG_HOST="$PG_HOST"
       --build-arg PG_PORT="$PG_PORT"
