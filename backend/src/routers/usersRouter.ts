@@ -2,19 +2,7 @@ import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import argon2 from 'argon2'
 import { addUser, getUserByUsername } from '../dao'
-// import { authenticate } from '../middleware'
-
-// interface CustomRequest extends Request {
-//     user_id?: number
-// }
-
 const usersRouter = express.Router()
-
-// interface User {
-//     user_id?: number
-//     username: string,
-//     password_hash: string
-// }
 
 const secret = process.env.SECRET
 if (secret === undefined) throw new Error('Missing SECRET environment variable')
