@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 import { getUserById } from './dao'
 
 interface CustomRequest extends Request {
-    user_id?: number
+	logged_in?: boolean
+  user_id?: number
 }
 
 export const unknownEndpoint = (_req: Request, res: Response) => {
