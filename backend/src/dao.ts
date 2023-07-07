@@ -1,7 +1,19 @@
 import { executeQuery } from './db'
+import query from './query'
 
 export const getEvents = async () => {
-    const query = 'SELECT title FROM events'
-    const result = await executeQuery(query)
-    return result.rows
+	const result = await executeQuery(query.allEvents)
+	return result.rows
+}
+
+export const getEventByUserId = async (userId: string) => {
+	const params = [userId]
+	const result = await executeQuery(query.eventsByUserId, params)
+	return result.rows
+}
+
+export const getEventById = async (id: string) => {
+	const params = [id]
+	const result = await executeQuery(query.eventsById, params)
+	return result.rows
 }
