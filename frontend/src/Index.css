@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.form,
+.content {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-family: inherit;
+}
+
+.heading {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.events {
+    margin-left: 300px;
+    margin-right: 400px;
+    padding-left: 170px;
+    padding-right: 160px;
+    line-height: 27px;
+}
+
+nav {
+    margin-top: 10px;
+    line-height: 25px;
+}
