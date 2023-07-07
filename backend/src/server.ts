@@ -10,7 +10,7 @@ server.use('/', express.static('./dist/client'))
 
 server.use(express.json())
 server.get('/version', (req: Request, res: Response) => {
-	res.send('Server version 0.2.8')
+	res.send('Server version 0.2.9')
 })
 server.use('/users',  usersRouter)
 server.use('/events', authenticate, eventsRouter)
