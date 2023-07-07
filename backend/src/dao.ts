@@ -7,7 +7,7 @@ interface User {
     password_hash: string
 }
 
-
+// User
 export const addUser = async (username: string, password_hash: string) => {
 	const createUser = query.addUser
 	const params = [username, password_hash]
@@ -40,6 +40,8 @@ export const getUserById = async (user_id: number) => {
 	}
 }
 
+
+// Events
 export const getEvents = async () => {
 	const result = await executeQuery(query.allEvents)
 	return result.rows
@@ -55,4 +57,30 @@ export const getEventById = async (id: string) => {
 	const params = [id]
 	const result = await executeQuery(query.eventsById, params)
 	return result.rows
+}
+
+export const deleteEventById = async (id: string) => {
+	const params = [id]
+	await executeQuery(query.deleteEventById, params)
+	return 
+}
+
+
+// comments
+export const getCommentByEventId = async (id: string) => {
+	const params = [id]
+	const result = await executeQuery(query.getCommentByEventId, params)
+	return result.rows
+}
+
+export const postComment = async (event_id: string, user_id: number | null | undefined, comment: string) => {
+	const params = [event_id, user_id, comment]
+	await executeQuery(query.postComment, params)
+	return
+}
+
+export const deleteCommentByEventId = async (event_id: string) => {
+	const params = [event_id]
+	await executeQuery(query.deleteCommentsInEvent, params)
+	return
 }
