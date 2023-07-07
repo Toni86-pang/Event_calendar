@@ -2,9 +2,9 @@ import { executeQuery } from './db'
 import query from './query'
 
 interface User {
-    user_id?: number
-    username: string,
-    password_hash: string
+	user_id?: number
+	username: string,
+	password_hash: string
 }
 
 
@@ -29,10 +29,10 @@ export const getUserByUsername = async (username: string) => {
 	}
 }
 
-export const getUserById = async (user_id: number) => {
+export const getUserById = async (userId: number) => {
 
 	try {
-		const result = await executeQuery(query.checkIfUserIdExist, [user_id])
+		const result = await executeQuery(query.checkIfUserIdExist, [userId])
 		return result.rows[0]
 	} catch (error) {
 		console.error('Error executing query:', error)
@@ -54,5 +54,13 @@ export const getEventByUserId = async (userId: string) => {
 export const getEventById = async (id: string) => {
 	const params = [id]
 	const result = await executeQuery(query.eventsById, params)
+	return result.rows
+}
+
+export const addEvent = async (userId: number, title: string, content: string, isPrivate: boolean, date: string, time: string) => {
+	const formattedDate = date.substring(6) + '-' + date.substring(3,5) + '-' + date.substring(0,2) 
+	const dateTime = `${formattedDate} ${time}`
+	const params = [userId, title, content, isPrivate, dateTime]
+	const result = await executeQuery(query.addEvent, params)
 	return result.rows
 }
