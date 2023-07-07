@@ -90,3 +90,5 @@ eventsRouter.post('/', validatePostEvent, async (req: CustomRequest, res: Respon
 	res.send(result)
 
 })
+
+export default eventsRouter
