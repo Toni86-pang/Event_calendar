@@ -4,10 +4,10 @@ import { useState } from 'react';
 export default function Nav() {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = () => {
-    // Perform login logic
-    setLoggedIn(true);
-  };
+//   const handleLogin = () => {
+//     // Perform login logic
+//     setLoggedIn(true);
+//   };
 
   const handleLogout = () => {
     // Perform logout logic
@@ -17,15 +17,15 @@ export default function Nav() {
   return (
     <div className='navbar'>
       <nav>
-        <Link to={'/'}>Home</Link>
-        <Link to={'/2'}>About</Link>
-        <NavLink to="/register" >
+        <Link to={'/'}>home</Link>
+        <Link to='/events'>events</Link>
+        <NavLink to='/register' >
           Register
         </NavLink>
         {loggedIn ? (
           <button onClick={handleLogout}>Logout</button>
         ) : (
-          <NavLink to="/login" >
+          <NavLink to='/login' >
             Login
           </NavLink>
         )}

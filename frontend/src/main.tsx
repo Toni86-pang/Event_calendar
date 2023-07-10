@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Nav from './components/nav/navbar';
-import App from './App';
-import Events, { loader as eventLoader } from './components/event/Event';
+
+// import { loader as eventLoader } from './components/event/Event';
 import ErrorPage from './ErrorPage';
 import RegistrationForm from './components/register/register';
 import LoginForm from './components/login/login';
+import EventList, { loader as eventsLoader } from './components/event/EventList';
 
 const routes = [
   {
@@ -14,22 +15,24 @@ const routes = [
     element: (
       <>
         <Nav />
-        <App />
       </>
     ),
     children: [
       {
-        path: '/events/event/:id',
-        element: <Events />,
-        loader: eventLoader,
+        path: '/events',
+        element: <EventList />,
+        loader: eventsLoader,
+        errorElement: <ErrorPage/>,
       },
       {
         path: '/register',
         element: <RegistrationForm onRegister={handleRegistrationFormSubmit} />,
+        errorElement: <ErrorPage/>,
       },
       {
         path: '/login',
         element: <LoginForm onSubmit={handleLoginFormSubmit} />,
+        errorElement: <ErrorPage/>,
       },
     ],
   },
@@ -39,9 +42,7 @@ const routingConfig = createBrowserRouter(routes);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Route>
-      <RouterProvider router={routingConfig} />
-    </Route>
+    <RouterProvider router={routingConfig} />
   </React.StrictMode>,
   document.getElementById('root')
 );

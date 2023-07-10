@@ -8,10 +8,33 @@ function RegistrationForm({ onRegister }: RegistrationFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    onRegister(username, password);
+
+    // Make API call to register the user
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the server
+        // For example, you can check if the registration was successful
+        if (data.success) {
+          onRegister(username, password); // Call the onRegister callback
+        } else {
+          // Handle the registration error
+          console.error('Registration failed:', data.error);
+        }
+      })
+      .catch((error) => {
+        // Handle any network or server errors
+        console.error('Registration error:', error);
+      });
+
     setUsername('');
     setPassword('');
   }
@@ -46,7 +69,7 @@ function RegistrationForm({ onRegister }: RegistrationFormProps) {
           required
         />
       </div>
-   
+
       <button id="register-button" type="submit">
         Register
       </button>
