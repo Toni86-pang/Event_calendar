@@ -57,13 +57,13 @@ const EventList = () => {
 
     const eventNavigation = eventList.map((event) => (
         <li key={'events' + event.id}>
-          {event.id && (
-            <Link to={event.id.toString()}>
+        
+          
               <p>
-                {event.title}: {event.date_time}
+                {event.title} {event.id}
               </p>
-            </Link>
-          )}
+    
+     
         </li>
       ))
 
