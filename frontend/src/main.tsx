@@ -11,18 +11,22 @@ import './Index.css'
 const router = createBrowserRouter([
 
   {
-    path: '/',
+    path: '/events',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
-      
+      {
+        path: '/events',
+        element: <EventList />,
+        loader: eventsLoader,
+        errorElement: <ErrorPage />
+      },
       {
         path: '/events/event/:id',
         element: <Event />,
         loader: eventLoader,
         errorElement: <ErrorPage />
       },
-
 
     ],
 

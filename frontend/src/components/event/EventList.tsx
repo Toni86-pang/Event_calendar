@@ -2,11 +2,11 @@ import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 
 interface Event {
-    id?: string
+    id?: number
     title: string
     content?: string
     isPrivate?: boolean
-    date_time:string
+    date_time: string
 }
 
 export function loader({ params }: any) {
@@ -56,14 +56,14 @@ const EventList = () => {
     }
 
     const eventNavigation = eventList.map((event) => (
-        <li key={'events' + event.id}>
-        
-          
-              <p>
-                {event.title} {event.id}
-              </p>
-    
-     
+        <li key={event.id}>
+
+            <Link to={event.title}>
+                <p>
+                    {event.title}: {event.date_time}
+                </p>
+            </Link>
+
         </li>
       ))
 

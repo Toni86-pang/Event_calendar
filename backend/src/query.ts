@@ -5,7 +5,7 @@ const checkIfUserIdExist = 'SELECT * FROM users WHERE user_id = $1;'
 
 
 // Events
-const allEvents = 'SELECT title, private FROM events;'
+const allEvents = 'SELECT title, private, date_time, event_id FROM events;'
 const eventsByUserId = 'SELECT title, content, private, date_time FROM events WHERE user_id = $1;'
 const eventsById = 'SELECT user_id, title, content, private, date_time FROM events WHERE event_id = $1;'
 const deleteEventById = 'DELETE FROM events WHERE event_id = $1;'
