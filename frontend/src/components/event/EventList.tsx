@@ -27,7 +27,7 @@ const EventList = () => {
         const getEvents = async () => {
             try {
 
-                const response = await fetch('/api/events')
+                const response = await fetch('/events')
                 const events = await response.json() as Array<Event>
                 console.log(events)
                 setEvents(events)
@@ -65,7 +65,7 @@ const EventList = () => {
             </Link>
 
         </li>
-    ))
+      ))
 
     return (
         <>
