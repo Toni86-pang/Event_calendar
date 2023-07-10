@@ -2,15 +2,19 @@ import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 
 interface Event {
-    id?: string
+    id?: number
     title: string
     content?: string
     isPrivate?: boolean
-    date_time:string
-    participants?: []
+    date_time: string
 }
 
-const ShowEvents = () => {
+export function loader({ params }: any) {
+
+    return params.id
+}
+
+const EventList = () => {
 
     const [search, setSearch] = useState('')
     const [events, setEvents] = useState<Event[]>([])
@@ -23,7 +27,7 @@ const ShowEvents = () => {
         const getEvents = async () => {
             try {
 
-                const response = await fetch('/events')
+                const response = await fetch('/api/events')
                 const events = await response.json() as Array<Event>
                 console.log(events)
                 setEvents(events)
@@ -52,28 +56,28 @@ const ShowEvents = () => {
     }
 
     const eventNavigation = eventList.map((event) => (
-        <li key={'events' + event.id}>
-          {event.id && (
-            <Link to={event.id.toString()}>
-              <p>
-                {event.title}: {event.date_time}
-              </p>
+        <li key={event.id}>
+
+            <Link to={event.title}>
+                <p>
+                    {event.title}: {event.date_time}
+                </p>
             </Link>
-          )}
+
         </li>
-      ));
+    ))
 
     return (
         <>
             <h1>The Event Calendar</h1>
-            <div className="songBrowser">
+            <div className="eventBrowser">
                 <div className='leftColumn'>
                     <input onChange={handleChange} type='text'></input>
-                    <ul className='songList'>
+                    <ul className='eventList'>
                         {eventNavigation}
                     </ul>
                 </div>
-                <div className='songInfo'>
+                <div className='eventInfo'>
                     <Outlet />
                 </div>
 
@@ -84,5 +88,4 @@ const ShowEvents = () => {
 
     )
 }
-export default ShowEvents
-
+export default EventList 
