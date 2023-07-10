@@ -6,15 +6,6 @@ interface CustomRequest extends Request {
 	logged_in?: boolean
   user_id?: number
 }
-
-interface Events {
-	event_id: number
-	user_id: number
-	title: string
-	content: string
-	private: boolean
-	date_time: string
-}
 interface Event {
 	event_id: number
 	user_id: number
