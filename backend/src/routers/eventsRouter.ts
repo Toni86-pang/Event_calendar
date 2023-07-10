@@ -1,17 +1,13 @@
 import express, {Request, Response}  from 'express'
-import { getEvents, getEventByUserId, getEventById, addEvent, deleteEventById, deleteCommentByEventId } from './../dao'
+import { getEvents, getEventByUserId, getEventById, addEvent, deleteEventById, deleteCommentByEventId, getInvitationsByUserId } from './../dao'
 import { validatePostEvent } from '../middleware'
 
 interface CustomRequest extends Request {
 	logged_in?: boolean
   user_id?: number
 }
-
-interface Events {
-	title: string
-	private: boolean
-}
 interface Event {
+	event_id: number
 	user_id: number
 	title: string
 	content: string
@@ -19,16 +15,16 @@ interface Event {
 	date_time: string
 }
 
-
 const eventsRouter = express.Router()
 
 // Get All events
 eventsRouter.get('/', async (req: CustomRequest, res: Response) => {
-	const events: Events[] = await getEvents()
+	const events: Event[] = await getEvents()
+	
 	const filterPublicEvents = events.filter(event => event.private === false)
-	if(!req.logged_in) return res.send(filterPublicEvents)
-
-	res.send(events)
+  
+	if(req.logged_in) return res.send(await getInvitationsByUserId(Number(req.user_id)))
+	res.send(filterPublicEvents)
 })
 
 
