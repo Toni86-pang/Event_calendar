@@ -1,22 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ReactDOM  from 'react-dom/client'
+import React from 'react'
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import EventList, {loader as eventsLoader} from './components/event/EventList'
+import Event, {loader as eventLoader} from './components/event/Event'
+import ErrorPage from './ErrorPage'
 import Nav from './components/nav/navbar';
-
-// import { loader as eventLoader } from './components/event/Event';
-import ErrorPage from './ErrorPage';
+import './Index.css'
 import RegistrationForm from './components/register/register';
 import LoginForm from './components/login/login';
-import EventList, { loader as eventsLoader } from './components/event/EventList';
 
-const routes = [
+
+const routes = createBrowserRouter ( [
   {
     path: '/',
-    element: (
-      <>
-        <Nav />
-      </>
-    ),
+    element: <Nav />,
     children: [
       {
         path: '/events',
@@ -32,19 +29,25 @@ const routes = [
       {
         path: '/login',
         element: <LoginForm onSubmit={handleLoginFormSubmit} />,
-        errorElement: <ErrorPage/>,
       },
+      {
+        path: '/api/events/event/:id',
+        element: <Event />,
+        loader: eventLoader,
+        errorElement: <ErrorPage />,
+      },
+
     ],
-  },
-];
+    
 
-const routingConfig = createBrowserRouter(routes);
+  }
+])
 
-ReactDOM.render(
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={routingConfig} />
+    <RouterProvider router={routes} />
   </React.StrictMode>,
-  document.getElementById('root')
 );
 
 function handleRegistrationFormSubmit(username: string, password: string) {

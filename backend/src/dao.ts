@@ -65,7 +65,7 @@ export const deleteEventById = async (id: string) => {
 }
 
 
-// comments
+// Comments
 export const getCommentByEventId = async (id: string) => {
 	const params = [id]
 	const result = await executeQuery(query.getCommentByEventId, params)
@@ -89,4 +89,20 @@ export const addEvent = async (userId: number, title: string, content: string, i
 	const params = [userId, title, content, isPrivate, dateTime]
 	const result = await executeQuery(query.addEvent, params)
 	return result.rows
+}
+
+
+// Invitations
+export const postInvitation = async (eventId: number, userCallId: number, userRecId: number) => {
+
+	const params = [eventId, userCallId, userRecId]
+	await executeQuery(query.postInvitation, params)
+}
+
+export const getInvitationsByUserId = async (userRecId: number) => {
+
+	const params = [userRecId]
+	const invitations = await executeQuery(query.getInvitationsByUserId, params)
+
+	return invitations.rows
 }
