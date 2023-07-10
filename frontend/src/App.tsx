@@ -1,9 +1,9 @@
+import ShowEvents from "./components/event/ShowEvents"
 
 function App() {
     return (
         <div className='App'>
-           
-            hello there! 
+            <ShowEvents/>
         </div>
     )
 }
