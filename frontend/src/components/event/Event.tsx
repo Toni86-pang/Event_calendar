@@ -9,9 +9,13 @@ interface Event {
     date_time:string
 }
 
-export function loader({ params }: any) {
-
-    return params.id
+export function loader({ params }: { params: any }) {
+  const id = Number(params.id)
+  
+  if (id === undefined) {
+      throw new Response("Not Found", { status: 404 })
+  }
+  return id
 }
 
 export default function Event() {
@@ -23,9 +27,9 @@ export default function Event() {
         const getEventInfo = async () => {
             try {
 
-            const response = await fetch('api/events/event/' + id)
+            const response = await fetch('api/events/event' + id)
             const event = await response.json() as Event[]
-            console.log(event)
+            console.log('event')
             if (event.length > 0) {
                 setCurrentEvent(event[0])
                 console.log("All works")

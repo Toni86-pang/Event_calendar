@@ -10,18 +10,18 @@ import './Index.css'
 const router = createBrowserRouter([
 
   {
-    path: '/api',
+    path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/api/events',
+        path: '/events',
         element: <EventList />,
         loader: eventsLoader,
         errorElement: <ErrorPage />
       },
       {
-        path: '/api/events/event/:id',
+        path: '/events/event/:id',
         element: <Event />,
         loader: eventLoader,
         errorElement: <ErrorPage />

@@ -9,11 +9,14 @@ interface Event {
     date_time: string
 }
 
-export function loader({ params }: any) {
-
-    return params.id
-}
-
+export function loader({ params }: { params: any }) {
+    const id = Number(params.id)
+    
+    if (id === undefined) {
+        throw new Response("Not Found", { status: 404 })
+    }
+    return id
+  }
 const EventList = () => {
 
     const [search, setSearch] = useState('')
@@ -56,9 +59,9 @@ const EventList = () => {
     }
 
     const eventNavigation = eventList.map((event) => (
-        <li key={event.id}>
+        <li key={'events/event/' + event.id}>
 
-            <Link to={event.title}>
+            <Link to={'/events/event/' + event.id}>
                 <p>
                     {event.title}: {event.date_time}
                 </p>
