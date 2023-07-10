@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 // import App from './App'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import Events, {loader as eventLoader} from './components/event/Events'
+import Events, {loader as eventLoader} from './components/event/Event'
 import ErrorPage from './ErrorPage'
 import App from './App'
 import './Index.css'
