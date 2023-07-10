@@ -9,12 +9,12 @@ const server = express()
 server.use('/', express.static('./dist/client'))
 
 server.use(express.json())
-server.get('/version', (req: Request, res: Response) => {
+server.get('/api/version', (req: Request, res: Response) => {
 	res.send('Server version 0.3.0')
 })
-server.use('/users',  usersRouter)
-server.use('/events', authenticate, eventsRouter)
-server.use('/comments', authenticate, commentsRouter)
+server.use('/api/users',  usersRouter)
+server.use('/api/events', authenticate, eventsRouter)
+server.use('/api/comments', authenticate, commentsRouter)
 server.use(unknownEndpoint)
 
 export default server
