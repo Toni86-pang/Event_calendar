@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-// import App from './App'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import Events, {loader as eventLoader} from './components/event/Event'
+import EventList, {loader as eventsLoader} from './components/event/EventList'
+import Event, {loader as eventLoader} from './components/event/Event'
 import ErrorPage from './ErrorPage'
 import App from './App'
 import './Index.css'
@@ -10,17 +10,22 @@ import './Index.css'
 const router = createBrowserRouter([
 
   {
-    path: '/events/',
+    path: '/api',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: '/events/event/:id',
-        element: <Events />,
+        path: '/api/events',
+        element: <EventList />,
+        loader: eventsLoader,
+        errorElement: <ErrorPage />
+      },
+      {
+        path: '/api/events/event/:id',
+        element: <Event />,
         loader: eventLoader,
         errorElement: <ErrorPage />
       },
-
     ],
     
 

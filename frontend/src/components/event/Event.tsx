@@ -2,12 +2,11 @@ import { useLoaderData } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 interface Event {
-    id?: string
+    id?: number
     title: string
     content: string
     isPrivate: boolean
     date_time:string
-    participants: []
 }
 
 export function loader({ params }: any) {
@@ -15,7 +14,7 @@ export function loader({ params }: any) {
     return params.id
 }
 
-export default function Events() {
+export default function Event() {
 
     const id = useLoaderData() as string
     const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
@@ -24,10 +23,12 @@ export default function Events() {
         const getEventInfo = async () => {
             try {
 
-            const response = await fetch('/events/event/' + id)
+            const response = await fetch('api/events/event/' + id)
             const event = await response.json() as Event[]
+            console.log(event)
             if (event.length > 0) {
                 setCurrentEvent(event[0])
+                console.log("All works")
               } else {
                 setCurrentEvent(null)
               }
@@ -49,7 +50,6 @@ export default function Events() {
             <p>Content: {currentEvent && currentEvent.content}</p>
             <p>Private: {currentEvent && currentEvent.isPrivate}</p>
             <p>Date and time: {currentEvent && currentEvent.date_time}</p>
-            <p>Participants: {currentEvent && currentEvent.participants}</p>
         </div>
     )
 }
