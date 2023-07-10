@@ -25,7 +25,10 @@ usersRouter.post('/register', async (req: Request, res: Response) => {
 	const password_hash = await argon2.hash(password)
 	const storedUser = await addUser(username, password_hash)
 	const id = storedUser.user_id ?? ''
+	console.log('id: ', id)
+	console.log('SECRET: ', secret)
 	const token = jwt.sign({ username, id }, secret)
+	console.log('token: ', token)
 	res.status(200).json({ token })
 })
 
