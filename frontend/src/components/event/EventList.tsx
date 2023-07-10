@@ -2,11 +2,11 @@ import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 
 interface Event {
-    id?: string
+    id?: number
     title: string
     content?: string
     isPrivate?: boolean
-    date_time:string
+    date_time: string
 }
 
 export function loader({ params }: any) {
@@ -27,7 +27,7 @@ const EventList = () => {
         const getEvents = async () => {
             try {
 
-                const response = await fetch('/events')
+                const response = await fetch('/api/events')
                 const events = await response.json() as Array<Event>
                 console.log(events)
                 setEvents(events)
@@ -56,16 +56,16 @@ const EventList = () => {
     }
 
     const eventNavigation = eventList.map((event) => (
-        <li key={'events' + event.id}>
-          {event.id && (
-            <Link to={event.id.toString()}>
-              <p>
-                {event.title}: {event.date_time}
-              </p>
+        <li key={event.id}>
+
+            <Link to={event.title}>
+                <p>
+                    {event.title}: {event.date_time}
+                </p>
             </Link>
-          )}
+
         </li>
-      ))
+    ))
 
     return (
         <>
