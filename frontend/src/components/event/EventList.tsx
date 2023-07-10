@@ -2,21 +2,18 @@ import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 
 interface Event {
-    id?: number
+    id?: string
     title: string
     content?: string
     isPrivate?: boolean
     date_time: string
 }
 
-export function loader({ params }: { params: any }) {
-    const id = Number(params.id)
-    
-    if (id === undefined) {
-        throw new Response("Not Found", { status: 404 })
-    }
-    return id
-  }
+export function loader({ params }: any) {
+
+    return params.id
+}
+
 const EventList = () => {
 
     const [search, setSearch] = useState('')
