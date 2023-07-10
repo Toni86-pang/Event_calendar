@@ -5,8 +5,8 @@ const checkIfUserIdExist = 'SELECT * FROM users WHERE user_id = $1;'
 
 
 // Events
-const allEvents = 'SELECT title, private FROM events;'
-const eventsByUserId = 'SELECT title, content, private, date_time FROM events WHERE user_id = $1;'
+const allEvents = 'SELECT event_id, title, private, date_time FROM events;'
+const eventsByUserId = 'SELECT event_id, title, content, private, date_time FROM events WHERE user_id = $1;'
 const eventsById = 'SELECT user_id, title, content, private, date_time FROM events WHERE event_id = $1;'
 const deleteEventById = 'DELETE FROM events WHERE event_id = $1;'
 const deleteCommentsInEvent = 'DELETE FROM comments WHERE event_id = $1'
@@ -16,7 +16,14 @@ const addEvent = 'INSERT INTO events (user_id, title, content, private, date_tim
 const postComment = 'INSERT INTO comments (event_id, user_id, comment, commentdate) VALUES ($1, $2, $3, current_timestamp);'
 const getCommentByEventId = 'SELECT user_id, comment, commentdate FROM comments WHERE event_id = $1;'
 
+// Invitations
 
+const postInvitation = 'INSERT INTO invitations (event_id, user_call_id, user_rec_id, inv_date) VALUES ($1, $2, $3, current_timestamp);'
+const getInvitationsByUserId = `
+	SELECT DISTINCT events.*
+	FROM events
+	LEFT JOIN invitations ON invitations.event_id = events.event_id
+	WHERE events.private = false OR invitations.user_rec_id = $1;`
 
 export default {
 	addUser,
@@ -29,5 +36,7 @@ export default {
 	deleteCommentsInEvent,
 	getCommentByEventId,
 	postComment,
-	addEvent
+	addEvent,
+	postInvitation,
+	getInvitationsByUserId
 }
