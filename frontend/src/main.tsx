@@ -11,7 +11,7 @@ import './Index.css'
 const router = createBrowserRouter([
 
   {
-    path: '/events',
+    path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
