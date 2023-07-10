@@ -7,10 +7,14 @@ interface Event {
     content?: string
     isPrivate?: boolean
     date_time:string
-    participants?: []
 }
 
-const ShowEvents = () => {
+export function loader({ params }: any) {
+
+    return params.id
+}
+
+const EventList = () => {
 
     const [search, setSearch] = useState('')
     const [events, setEvents] = useState<Event[]>([])
@@ -61,19 +65,19 @@ const ShowEvents = () => {
             </Link>
           )}
         </li>
-      ));
+      ))
 
     return (
         <>
             <h1>The Event Calendar</h1>
-            <div className="songBrowser">
+            <div className="eventBrowser">
                 <div className='leftColumn'>
                     <input onChange={handleChange} type='text'></input>
-                    <ul className='songList'>
+                    <ul className='eventList'>
                         {eventNavigation}
                     </ul>
                 </div>
-                <div className='songInfo'>
+                <div className='eventInfo'>
                     <Outlet />
                 </div>
 
@@ -84,5 +88,4 @@ const ShowEvents = () => {
 
     )
 }
-export default ShowEvents
-
+export default EventList 

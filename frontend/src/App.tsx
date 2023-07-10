@@ -1,9 +1,9 @@
-import Events from "./components/event/Event"
+import EventList from "./components/event/EventList"
 
 function App() {
     return (
         <div className='App'>
-            <Events/>
+            <EventList/>
         </div>
     )
 }
