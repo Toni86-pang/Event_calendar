@@ -8,6 +8,7 @@ interface Event {
   content: string
   isPrivate: boolean
   date_time: string
+  user_id: number
 }
 
 interface Comment {

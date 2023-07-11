@@ -43,16 +43,14 @@ function CreateEvent({ newEvent, eventId }: Props) {
 
 	const navigate = useNavigate()
 
-	const onOptionChance = () => {
-		setPrivate(true)
+	const handlePrivate = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setPrivate(e.target.value === 'true')
 	}
 
 	const check = () => {
 
-		if (!title || !content || !isPrivate || !date || !time) {
-			return true
-		}
-		return false
+		return (!title || !content || !date || !time) 
+		
 	}
 
 	const reset = () => {
@@ -73,27 +71,50 @@ function CreateEvent({ newEvent, eventId }: Props) {
 			date: date,
 			time: time
 		}
-
-		try {
-			const response = await fetch('/api/events', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(eventData)
-			})
-
-			if (response.ok) {
-				console.log('Event created successfully!')
-				console.log(response.json())
-				reset()
-				navigate('/events')
-			} else {
-				throw new Error('Failed to create event')
+		if(newEvent){
+			try {
+				const response = await fetch('/api/events', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(eventData)
+				})
+	
+				if (response.ok) {
+					console.log('Event created successfully!')
+					console.log(response.json())
+					reset()
+					navigate('/events')
+				} else {
+					throw new Error('Failed to create event')
+				}
+			} catch(error) {
+				console.error('Error creating event:', error)
 			}
-		} catch(error) {
-			console.error('Error creating event:', error)
+		} else {
+			try {
+				const response = await fetch('/api/events/' + eventId, {
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(eventData)
+				})
+	
+				if (response.ok) {
+					console.log('Event modified successfully!')
+					console.log(response.json())
+					reset()
+					navigate('/events')
+				} else {
+					throw new Error('Failed to modify event')
+				}
+			} catch(error) {
+				console.error('Error modifying event:', error)
+			}
 		}
+
 
 		console.log('Title:' + title)
 		console.log('Content:' + content)
@@ -104,7 +125,8 @@ function CreateEvent({ newEvent, eventId }: Props) {
 
 	return (
 		<div>
-			<h1>Create event</h1>
+			{newEvent && <h1>Create event</h1> }
+			{!newEvent && <h1>Modify event</h1> }
 			<form onSubmit={onSubmit}>
 				<div className="form-group">
 					<label htmlFor="title">Name of event: </label>
@@ -139,8 +161,9 @@ function CreateEvent({ newEvent, eventId }: Props) {
 						name="isPrivate"
 						value='true'
 						id="isPrivate"
+						checked={isPrivate}
 						required
-						onChange={onOptionChance}
+						onChange={handlePrivate}
 					/>
 				</div>
 				<div className="form-group">
@@ -150,8 +173,9 @@ function CreateEvent({ newEvent, eventId }: Props) {
 						name="isPrivate"
 						value='false'
 						id="isPrivate"
+						checked={!isPrivate}
 						required
-						onChange={onOptionChance}
+						onChange={handlePrivate}
 					/>
 				</div>
 				<div className="form-group">
@@ -180,7 +204,7 @@ function CreateEvent({ newEvent, eventId }: Props) {
 					<button className="submit"
 						type="submit"
 						disabled={check()}>
-                        Create event
+						{newEvent?'Create':'Modify'} event
 					</button>
 					<button onClick={() => navigate('/')} className="close"
 						type="reset">

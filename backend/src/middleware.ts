@@ -42,7 +42,7 @@ export const authenticate = async (req: CustomRequest, res: Response, next: Next
 export const validatePostEvent = async (req: CustomRequest, res: Response, next: NextFunction) => {
 	const user_id = req.user_id
 	if(!req.logged_in || !user_id) {
-		res.status(401).send()
+		return res.status(401).send()
 	}
 	const { title, content, isPrivate, date, time } = req.body
 	if (!title || !content || isPrivate===undefined || !date || !time) {
