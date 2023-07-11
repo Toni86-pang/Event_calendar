@@ -1,8 +1,23 @@
+html {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	background-image: linear-gradient( rgba(254,255,0,1) 0%, rgba(121,118,9,1) 35%, rgba(2,0,36,1)100%);
+}
+
 nav {
-	background-color: bisque;
+	margin: 0;
+	background-color: rgb(182, 179, 9);
 	margin-bottom: 1rem;
 }
 
 .link {
 	margin-left: 2rem;
+}
+
+.construct {
+	position:absolute;
+	width: 100vw;
+	z-index: -100;
+	top: 40vh
 }
