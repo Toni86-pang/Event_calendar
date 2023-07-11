@@ -16,6 +16,7 @@ const modifyEvent = 'UPDATE events SET title = $2, content = $3, private = $4, d
 // Comments
 const postComment = 'INSERT INTO comments (event_id, user_id, comment, commentdate) VALUES ($1, $2, $3, current_timestamp);'
 const getCommentByEventId = 'SELECT user_id, comment, commentdate FROM comments WHERE event_id = $1;'
+// const getCommenterUsername = 'SELECT comments.user_id, users.username FROM comments JOIN users ON comments.user_id = users.user_id WHERE comments.user_id=$1;'
 
 // Invitations
 
@@ -45,5 +46,6 @@ export default {
 	modifyEvent,
 	getInvitationsByUserId,
 	participantsByEventId,
-	getAllUsers
+	getAllUsers,
+	// getCommenterUsername
 }
