@@ -10,6 +10,7 @@ const eventsById = 'SELECT user_id, title, content, private, date_time FROM even
 const deleteEventById = 'DELETE FROM events WHERE event_id = $1;'
 const deleteCommentsInEvent = 'DELETE FROM comments WHERE event_id = $1'
 const addEvent = 'INSERT INTO events (user_id, title, content, private, date_time) VALUES ($1, $2, $3, $4, $5) RETURNING *;'
+const modifyEvent = 'UPDATE events SET title = $2, content = $3, private = $4, date_time = $5 WHERE event_id = $1'
 
 // Comments
 const postComment = 'INSERT INTO comments (event_id, user_id, comment, commentdate) VALUES ($1, $2, $3, current_timestamp);'
@@ -24,6 +25,9 @@ const getInvitationsByUserId = `
 	LEFT JOIN invitations ON invitations.event_id = events.event_id
 	WHERE events.private = false OR invitations.user_rec_id = $1;`
 
+//participants
+const participantsByEventId = ' SELECT participant_id, user_id, attendance FROM participants WHERE event_id = $1;'
+
 export default {
 	addUser,
 	checkIfUsernameExist,
@@ -37,5 +41,7 @@ export default {
 	postComment,
 	addEvent,
 	postInvitation,
-	getInvitationsByUserId
+	modifyEvent,
+	getInvitationsByUserId,
+	participantsByEventId,
 }
