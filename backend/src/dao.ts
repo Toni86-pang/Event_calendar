@@ -65,6 +65,27 @@ export const deleteEventById = async (id: string) => {
 }
 
 
+export const addEvent = async (userId: number, title: string, content: string, isPrivate: boolean, date: string, time: string) => {
+	const formattedDate = date.substring(6) + '-' + date.substring(3,5) + '-' + date.substring(0,2) 
+	const dateTime = `${formattedDate} ${time}`
+	console.log(dateTime)
+	const params = [userId, title, content, isPrivate, dateTime]
+	const result = await executeQuery(query.addEvent, params)
+	return result.rows
+}
+
+export const modifyEvent = async (eventId: number, userId: number, title: string, content: string, isPrivate: boolean, date: string, time: string) => {
+	const formattedDate = date.substring(6) + '-' + date.substring(3,5) + '-' + date.substring(0,2)
+	const dateTime = `${date} ${time}`
+	console.log(date, formattedDate)
+	console.log(dateTime)
+	const params = [eventId, title, content, isPrivate, dateTime]
+	const result = await executeQuery(query.modifyEvent, params)
+	return result.rows
+}
+
+
+
 // Comments
 export const getCommentByEventId = async (id: string) => {
 	const params = [id]
@@ -83,13 +104,7 @@ export const deleteCommentByEventId = async (event_id: string) => {
 	await executeQuery(query.deleteCommentsInEvent, params)
 	return
 }
-export const addEvent = async (userId: number, title: string, content: string, isPrivate: boolean, date: string, time: string) => {
-	const formattedDate = date.substring(6) + '-' + date.substring(3,5) + '-' + date.substring(0,2) 
-	const dateTime = `${formattedDate} ${time}`
-	const params = [userId, title, content, isPrivate, dateTime]
-	const result = await executeQuery(query.addEvent, params)
-	return result.rows
-}
+
 
 
 // Invitations

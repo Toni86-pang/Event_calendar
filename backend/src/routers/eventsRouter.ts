@@ -1,5 +1,5 @@
 import express, {Request, Response}  from 'express'
-import { getEvents, getEventByUserId, getEventById, addEvent, deleteEventById, deleteCommentByEventId, getInvitationsByUserId } from './../dao'
+import { getEvents, getEventByUserId, getEventById, addEvent, deleteEventById, deleteCommentByEventId, getInvitationsByUserId, modifyEvent } from './../dao'
 import { validatePostEvent } from '../middleware'
 
 interface CustomRequest extends Request {
@@ -83,6 +83,19 @@ eventsRouter.post('/', validatePostEvent, async (req: CustomRequest, res: Respon
 	const { title, content, isPrivate, date, time } = req.body
 
 	const result = await addEvent(userId, title, content, isPrivate, date, time)
+	res.send(result)
+
+})
+
+// Put event
+eventsRouter.put('/:id', validatePostEvent, async (req: CustomRequest, res: Response) => {
+	console.log(req.user_id)
+	const userId = Number(req.user_id)
+	
+	const { title, content, isPrivate, date, time } = req.body
+	const eventId = Number(req.params.id)
+
+	const result = await modifyEvent(eventId, userId, title, content, isPrivate, date, time)
 	res.send(result)
 
 })
