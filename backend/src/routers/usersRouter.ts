@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import argon2 from 'argon2'
-import { addUser, getUserByUsername } from '../dao'
+import { addUser, getUserByUsername, getUsers } from '../dao'
 const usersRouter = express.Router()
 
 const secret = process.env.SECRET
@@ -49,6 +49,11 @@ usersRouter.post('/login', async (req: Request, res: Response) => {
 	const token = jwt.sign({ username, id }, secret)
 	res.status(200).json(token)
 
+})
+
+usersRouter.get('/', async (req: Request, res: Response) => {
+	const user = await getUsers()
+	res.send(user)
 })
 
 export default usersRouter

@@ -29,7 +29,6 @@ export default function Event() {
         const event = await response.json() as Event[]
         if (event.length > 0) {
           setCurrentEvent(event[0])
-          console.log('All works')
         } else {
           setCurrentEvent(null)
         }
