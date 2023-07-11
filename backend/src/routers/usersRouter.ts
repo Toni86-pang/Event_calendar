@@ -34,7 +34,7 @@ usersRouter.post('/register', async (req: Request, res: Response) => {
 
 usersRouter.post('/login', async (req: Request, res: Response) => {
 	const { username, password } = req.body
-
+	console.log('req', req.body)
 	const existingUser = await getUserByUsername(username)
 	if (existingUser === undefined) {
 		return res.status(401).send('Invalid username or password')
@@ -47,7 +47,7 @@ usersRouter.post('/login', async (req: Request, res: Response) => {
 	const id = existingUser.user_id
 
 	const token = jwt.sign({ username, id }, secret)
-	res.status(200).json({ token })
+	res.status(200).json(token)
 
 })
 

@@ -61,12 +61,12 @@ export const getEventById = async (id: string) => {
 export const deleteEventById = async (id: string) => {
 	const params = [id]
 	await executeQuery(query.deleteEventById, params)
-	return 
+	return
 }
 
 
 export const addEvent = async (userId: number, title: string, content: string, isPrivate: boolean, date: string, time: string) => {
-	const formattedDate = date.substring(6) + '-' + date.substring(3,5) + '-' + date.substring(0,2) 
+	const formattedDate = date.substring(6) + '-' + date.substring(3, 5) + '-' + date.substring(0, 2)
 	const dateTime = `${formattedDate} ${time}`
 	console.log(dateTime)
 	const params = [userId, title, content, isPrivate, dateTime]
@@ -75,7 +75,7 @@ export const addEvent = async (userId: number, title: string, content: string, i
 }
 
 export const modifyEvent = async (eventId: number, userId: number, title: string, content: string, isPrivate: boolean, date: string, time: string) => {
-	const formattedDate = date.substring(6) + '-' + date.substring(3,5) + '-' + date.substring(0,2)
+	const formattedDate = date.substring(6) + '-' + date.substring(3, 5) + '-' + date.substring(0, 2)
 	const dateTime = `${date} ${time}`
 	console.log(date, formattedDate)
 	console.log(dateTime)
@@ -120,4 +120,20 @@ export const getInvitationsByUserId = async (userRecId: number) => {
 	const invitations = await executeQuery(query.getInvitationsByUserId, params)
 
 	return invitations.rows
+}
+
+
+// participants
+
+export const getParticipantsByEventId = async (eventId: number) => {
+	try {
+		const result = await executeQuery(
+			query.participantsByEventId,
+			[eventId]
+		)
+		return result.rows
+	} catch (error) {
+		console.error('Error executing query:', error)
+		throw error
+	}
 }
