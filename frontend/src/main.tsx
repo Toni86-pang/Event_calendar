@@ -21,6 +21,14 @@ const routes = createBrowserRouter([
 				element: <EventList />,
 				loader: eventsLoader,
 				errorElement: <ErrorPage />,
+				children: [
+					{
+						path: '/events/event/:id',
+						element: <Event />,
+						loader: eventLoader,
+						errorElement: <ErrorPage />,
+					}
+				]
 			},
 			{
 				path: '/register',
@@ -30,12 +38,6 @@ const routes = createBrowserRouter([
 			{
 				path: '/login',
 				element: <LoginForm />,
-			},
-			{
-				path: '/events/event/:id',
-				element: <Event />,
-				loader: eventLoader,
-				errorElement: <ErrorPage />,
 			},
 			{
 				path: 'events/create',
