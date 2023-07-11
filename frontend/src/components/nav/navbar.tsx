@@ -8,6 +8,7 @@ export default function Nav() {
 	
 	const handleLogout = () => {
 		setLoggedIn(false)
+		localStorage.clear()
 	}
 
 	return (
