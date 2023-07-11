@@ -13,11 +13,12 @@ export default function Nav() {
 	return (
 		<div className='body'>
 			<nav>
-				<Link className='link' to='/'>Home</Link>
-				<Link className='link' to='/events'>Events</Link>
-				<Link className='link' to='/register'>Register</Link>
-				{loggedIn ? <Link className='link' to='/' onClick={handleLogout}>Logout</Link>
-									: <Link className='link' to='/login'>Login</Link>
+				<Link className='link' to='/'><button>Home</button></Link>
+				<Link className='link' to='/events'><button>Events</button></Link>
+				<Link className='link' to='/events/create'><button>New event</button></Link>
+				<Link className='link' to='/register'><button>Register</button></Link>
+				{loggedIn ? <Link className='link' to='/' onClick={handleLogout}><button>Logout</button></Link>
+									: <Link className='link' to='/login'><button>Login</button></Link>
 				}
 			</nav>
 			<img className='construct' src='./src/img/pngwing.com.png' />
