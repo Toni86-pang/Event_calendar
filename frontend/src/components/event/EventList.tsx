@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom'
-import { useState, ChangeEvent, useEffect } from 'react'
+import React, { useState, ChangeEvent, useEffect } from 'react'
 
 interface Event {
     event_id?: string
@@ -9,75 +9,76 @@ interface Event {
     date_time: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loader({ params }: any) {
 
-    return params
+	return params
 }
 
 const EventList = () => {
 
-    const [search, setSearch] = useState('')
-    const [events, setEvents] = useState<Event[]>([])
+	const [search, setSearch] = useState('')
+	const [events, setEvents] = useState<Event[]>([])
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value);
-    }
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setSearch(e.target.value)
+	}
 
-    useEffect(() => {
-        const getEvents = async () => {
-            try {
+	useEffect(() => {
+		const getEvents = async () => {
+			try {
 
-                const response = await fetch('/api/events')
-                const events = await response.json() as Array<Event>
-                setEvents(events)
+				const response = await fetch('/api/events')
+				const events = await response.json() as Array<Event>
+				setEvents(events)
 
-            } catch (error) {
-                console.log('Error fetching event data:', error);
-            }
-        }
+			} catch (error) {
+				console.log('Error fetching event data:', error)
+			}
+		}
 
-        getEvents()
+		getEvents()
 
-    }, [])
+	}, [])
 
-    let eventList
+	let eventList
 
-    if (search.length > 0) {
+	if (search.length > 0) {
 
 
-        const filteredEvents = events.filter((event) =>
-            event.title.toLowerCase().includes(search.toLowerCase())
-        )
-        eventList = filteredEvents
-    } else {
-        eventList = events
-    }
+		const filteredEvents = events.filter((event) =>
+			event.title.toLowerCase().includes(search.toLowerCase())
+		)
+		eventList = filteredEvents
+	} else {
+		eventList = events
+	}
 
-    const eventNavigation = eventList.map((event, i) => (
-        <li key={'event' + event.event_id + i}>
-            <Link to={'event/' + event.event_id}>
-                <p>
-                    {event.title}: {event.date_time}
-                </p>
-            </Link>
-        </li>
-    ))
+	const eventNavigation = eventList.map((event, i) => (
+		<li key={'event' + event.event_id + i}>
+			<Link to={'event/' + event.event_id}>
+				<p>
+					{event.title}: {event.date_time}
+				</p>
+			</Link>
+		</li>
+	))
 
-    return (
-        <>
-            <h1>The Event Calendar</h1>
-            <div className="eventBrowser">
-                <div className='leftColumn'>
-                    <input onChange={handleChange} type='text'></input>
-                    <ul className='eventList'>
-                        {eventNavigation}
-                    </ul>
-                </div>
-                <div className='eventInfo'>
-                    <Outlet />
-                </div>
-            </div>
-        </>
-    )
+	return (
+		<>
+			<h1>The Event Calendar</h1>
+			<div className="eventBrowser">
+				<div className='leftColumn'>
+					<input onChange={handleChange} type='text'></input>
+					<ul className='eventList'>
+						{eventNavigation}
+					</ul>
+				</div>
+				<div className='eventInfo'>
+					<Outlet />
+				</div>
+			</div>
+		</>
+	)
 }
 export default EventList 

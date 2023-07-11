@@ -24,18 +24,18 @@ export default function Event() {
 		const getEventInfo = async () => {
 			try {
 
-            const response = await fetch('api/events/event/' + id)
-            const event = await response.json() as Event[]
-            if (event.length > 0) {
-                setCurrentEvent(event[0])
-                console.log("All works")
-              } else {
-                setCurrentEvent(null)
-              }
-            } catch (error) {
-              console.log('Error fetching event data:', error)
-            }
-          }
+				const response = await fetch('api/events/event/' + id)
+				const event = await response.json() as Event[]
+				if (event.length > 0) {
+					setCurrentEvent(event[0])
+					console.log('All works')
+				} else {
+					setCurrentEvent(null)
+				}
+			} catch (error) {
+				console.log('Error fetching event data:', error)
+			}
+		}
 
 		getEventInfo()
 
