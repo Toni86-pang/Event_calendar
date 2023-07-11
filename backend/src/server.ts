@@ -14,7 +14,7 @@ server.get('/api/version', (req: Request, res: Response) => {
 	res.send('Server version 0.3.2')
 })
 
-server.use('/api/users',  usersRouter)
+server.use('/api/users' ,usersRouter)
 server.use('/api/events', authenticate, eventsRouter)
 server.use('/api/comments', authenticate, commentsRouter)
 server.use('/api/invitations', authenticate, invitationsRouter)
