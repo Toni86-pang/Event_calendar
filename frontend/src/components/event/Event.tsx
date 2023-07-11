@@ -24,11 +24,10 @@ export default function Event() {
     const getEventInfo = async () => {
       try {
 
-        const response = await fetch('api/events/event/' + id)
+        const response = await fetch('/api/events/event/' + id)
         const event = await response.json() as Event[]
         if (event.length > 0) {
           setCurrentEvent(event[0])
-          console.log('All works')
         } else {
           setCurrentEvent(null)
         }
@@ -41,6 +40,15 @@ export default function Event() {
 
   }, [id])
 
+  const formatDateTime = (dateTime: string): string => {
+    const date = new Date(dateTime)
+    const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
+    const hours = date.getHours()
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const formattedTime = `${hours}:${minutes}`
+    return formattedDate + ' ' + formattedTime
+  }
+
   return (
 
     <div className='events'>
@@ -48,8 +56,8 @@ export default function Event() {
         Title: {currentEvent && currentEvent.title}
       </h3>
       <p>Content: {currentEvent && currentEvent.content}</p>
-      <p>Private: {currentEvent && currentEvent.isPrivate}</p>
-      <p>Date and time: {currentEvent && currentEvent.date_time}</p>
+      <p>Private: {currentEvent && (currentEvent.isPrivate ? 'Yes' : 'No')}</p>
+      <p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
     </div>
   )
 }
