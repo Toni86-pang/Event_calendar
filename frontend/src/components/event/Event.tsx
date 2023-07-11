@@ -42,6 +42,15 @@ export default function Event() {
 
   }, [id])
 
+  const formatDateTime = (dateTime: string): string => {
+    const date = new Date(dateTime)
+    const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
+    const hours = date.getHours()
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const formattedTime = `${hours}:${minutes}`
+    return formattedDate + ' ' + formattedTime
+}
+
 	return (
 
 		<div className='events'>
