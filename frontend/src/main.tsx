@@ -8,6 +8,7 @@ import Nav from './components/nav/navbar';
 import './Index.css'
 import RegistrationForm from './components/register/register';
 import LoginForm from './components/login/login';
+import CreateEvent from './components/event/CreateEvent'
 
 
 const routes = createBrowserRouter ( [
@@ -36,6 +37,11 @@ const routes = createBrowserRouter ( [
         loader: eventLoader,
         errorElement: <ErrorPage />,
       },
+      {
+        path: 'events/create',
+        element: <CreateEvent newEvent={false} eventId={2}/>, // debug properties. mitä kautta annetaan lopullisessa appissa?
+        errorElement: <ErrorPage />
+      }
 
     ],
     

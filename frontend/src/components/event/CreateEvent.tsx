@@ -17,10 +17,8 @@ interface Event {
 const dummyEvent: Event = { user_id: Infinity, title: '', content: '', private: false, date_time: '' }
 
 function CreateEvent({ newEvent, eventId }: Props) {
-    newEvent = false
-    eventId = 1
-    let event: Event = dummyEvent
     useEffect(() => {
+        let event: Event = dummyEvent
         if (!newEvent) {
             const getEvent = async () => {
                 const result = await fetch('/api/events/event/' + eventId)
@@ -34,12 +32,12 @@ function CreateEvent({ newEvent, eventId }: Props) {
             getEvent()
             
         }
-    },[])
+    },[newEvent,eventId])
 
 
     const [title, setTitle] = useState('')
-    const [content, setContent] = useState(newEvent ? '' : event.content)
-    const [isPrivate, setPrivate] = useState(newEvent ? false : event.private)
+    const [content, setContent] = useState('')
+    const [isPrivate, setPrivate] = useState(false)
     const [date, setDate] = useState('')
     const [time, setTime] = useState('')
 
@@ -139,6 +137,7 @@ function CreateEvent({ newEvent, eventId }: Props) {
                     <input
                         type="radio"
                         name="isPrivate"
+                        value='true'
                         id="isPrivate"
                         required
                         onChange={onOptionChance}
@@ -149,6 +148,7 @@ function CreateEvent({ newEvent, eventId }: Props) {
                     <input
                         type="radio"
                         name="isPrivate"
+                        value='false'
                         id="isPrivate"
                         required
                         onChange={onOptionChance}
