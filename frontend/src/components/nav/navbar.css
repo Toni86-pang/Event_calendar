@@ -21,3 +21,41 @@ nav {
 	z-index: -100;
 	top: 40vh
 }
+
+.commentInputWrap {
+	border: 2px solid green;
+	margin-bottom: 15px;
+}
+
+.commentInput {
+
+}
+
+.commentBtn {
+
+}
+
+.commentWrapper {
+	border: 2px solid salmon;
+	border-radius: 15px;
+	padding: 15px 15px 0 15px;
+	background-color: aqua;
+}
+
+.commentItem {
+	background-color: antiquewhite;
+	border: 2px solid rgb(139, 114, 250);
+	font-size: 1.2rem;
+	border-radius: 5px;
+	list-style: none;
+	margin-bottom: 15px;
+	padding: 5px
+}
+p:nth-child(1) {
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+
+.commenterName {
+	font-weight: bold;
+}
