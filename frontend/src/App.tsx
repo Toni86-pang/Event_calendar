@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Nav from './components/nav/navbar';
-
 import Events, { loader as eventLoader } from './components/event/Event';
 import ErrorPage from './ErrorPage';
 import RegistrationForm from './components/register/register';

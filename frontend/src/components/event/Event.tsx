@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface Event {
     event_id?: string
