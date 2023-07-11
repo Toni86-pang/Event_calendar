@@ -39,7 +39,7 @@ const routes = createBrowserRouter([
 			},
 			{
 				path: 'events/create',
-				element: <CreateEvent newEvent={false} eventId={1}/>, // debug properties. mitä kautta annetaan lopullisessa appissa?
+				element: <CreateEvent />, // debug properties. mitä kautta annetaan lopullisessa appissa?
 				errorElement: <ErrorPage />
 			}
 
