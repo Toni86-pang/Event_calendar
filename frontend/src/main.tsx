@@ -37,6 +37,12 @@ const routes = createBrowserRouter([
         loader: eventLoader,
         errorElement: <ErrorPage />,
       },
+      {
+        path: 'events/create',
+        element: <CreateEvent newEvent={false} eventId={1}/>, // debug properties. mitä kautta annetaan lopullisessa appissa?
+        errorElement: <ErrorPage />
+      }
+
     ],
     errorElement: <ErrorPage />,
 

@@ -12,7 +12,7 @@ function RegistrationForm({ onRegister }: RegistrationFormProps) {
     event.preventDefault();
 
     // Make API call to register the user
-    fetch('/api/register', {
+    fetch('/api/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
