@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
+import './Events.css'
 
 interface Event {
     event_id?: string
