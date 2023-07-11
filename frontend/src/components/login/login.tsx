@@ -18,26 +18,10 @@ function LoginForm() {
 				}
 			})
 			console.log(response)
-			//const token = await response.json()
-			const reader = response.body?.getReader()
-			
-			let result = ''
+			const token = await response.json()
+			console.log(token)
 
-			if(reader) {
-				// eslint-disable-next-line no-constant-condition
-				while (true) {
-					const { done, value } = await reader.read()	
-					if (done) {
-						break
-					}
-					result += value
-				}	
-			}
-
-			const resultToArr = result.split(',')
-			const resultToToken = resultToArr.map(num => String.fromCharCode(Number(num))).join('')
-			localStorage.setItem('token', resultToToken)
-
+			localStorage.setItem('token', token)
 
 		} catch (error) {
 			console.log('Error login in:', error)

@@ -32,8 +32,8 @@ commentsRouter.get('/:eventId', async (req: CustomRequest, res: Response) => {
 	const commentId = req.params.eventId
 	const comment: Comment[] = await getCommentByEventId(commentId)
 
-	if(!comment[0]) return res.status(404).send('No comment')
-
+	if(!comment[0]) return res.status(200).json({})
+	console.log(comment)
 	res.send(comment)
 })
 
