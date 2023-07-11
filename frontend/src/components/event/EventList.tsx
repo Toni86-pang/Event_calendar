@@ -2,7 +2,7 @@ import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 
 interface Event {
-    id?: string
+    event_id?: string
     title: string
     content?: string
     isPrivate?: boolean
@@ -11,7 +11,7 @@ interface Event {
 
 export function loader({ params }: any) {
 
-    return params.id
+    return params
 }
 
 const EventList = () => {
@@ -27,9 +27,8 @@ const EventList = () => {
         const getEvents = async () => {
             try {
 
-                const response = await fetch('/events')
+                const response = await fetch('/api/events')
                 const events = await response.json() as Array<Event>
-                console.log(events)
                 setEvents(events)
 
             } catch (error) {
@@ -49,23 +48,20 @@ const EventList = () => {
         const filteredEvents = events.filter((event) =>
             event.title.toLowerCase().includes(search.toLowerCase())
         )
-
         eventList = filteredEvents
     } else {
         eventList = events
     }
 
-    const eventNavigation = eventList.map((event) => (
-        <li key={'events/event/' + event.id}>
-
-            <Link to={'/events/event/' + event.id}>
+    const eventNavigation = eventList.map((event, i) => (
+        <li key={'event' + event.event_id + i}>
+            <Link to={'event/' + event.event_id}>
                 <p>
                     {event.title}: {event.date_time}
                 </p>
             </Link>
-
         </li>
-      ))
+    ))
 
     return (
         <>
@@ -80,12 +76,8 @@ const EventList = () => {
                 <div className='eventInfo'>
                     <Outlet />
                 </div>
-
             </div>
-
-
         </>
-
     )
 }
 export default EventList 

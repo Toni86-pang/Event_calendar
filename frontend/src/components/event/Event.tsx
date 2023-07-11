@@ -2,7 +2,7 @@ import { useLoaderData } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 interface Event {
-    id: string
+    event_id?: string
     title: string
     content: string
     isPrivate: boolean
@@ -23,12 +23,10 @@ export default function Event() {
         const getEventInfo = async () => {
             try {
 
-            const response = await fetch('api/events/event/' + id)
+            const response = await fetch('/api/events/event/' + id)
             const event = await response.json() as Event[]
-            console.log('event', event)
             if (event.length > 0) {
                 setCurrentEvent(event[0])
-                console.log("All works")
               } else {
                 setCurrentEvent(null)
               }
