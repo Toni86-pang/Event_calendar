@@ -12,17 +12,17 @@ interface Event {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loader({ params }: any) {
 
-  return params.id
+	return params.id
 }
 
 export default function Event() {
 
-  const id = useLoaderData() as string
-  const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
+	const id = useLoaderData() as string
+	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
 
-  useEffect(() => {
-    const getEventInfo = async () => {
-      try {
+	useEffect(() => {
+		const getEventInfo = async () => {
+			try {
 
         const response = await fetch('/api/events/event/' + id)
         const event = await response.json() as Event[]
@@ -37,19 +37,19 @@ export default function Event() {
       }
     }
 
-    getEventInfo()
+		getEventInfo()
 
   }, [id])
 
-  return (
+	return (
 
-    <div className='events'>
-      <h3>
+		<div className='events'>
+			<h3>
         Title: {currentEvent && currentEvent.title}
       </h3>
       <p>Content: {currentEvent && currentEvent.content}</p>
-      <p>Private: {currentEvent && currentEvent.isPrivate}</p>
-      <p>Date and time: {currentEvent && currentEvent.date_time}</p>
+      <p>Private: {currentEvent && (currentEvent.isPrivate ? 'Yes' : 'No')}</p>
+      <p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
     </div>
   )
 }
