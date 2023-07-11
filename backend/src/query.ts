@@ -2,6 +2,7 @@
 const addUser = 'INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING user_id;'
 const checkIfUsernameExist = 'SELECT * FROM users WHERE username = $1;'
 const checkIfUserIdExist = 'SELECT * FROM users WHERE user_id = $1;'
+const getAllUsers = 'SELECT user_id, username FROM users;'
 
 // Events
 const allEvents = 'SELECT event_id, title, private, date_time FROM events ORDER BY date_time;'
@@ -46,6 +47,7 @@ export default {
 	modifyEvent,
 	getInvitationsByUserId,
 	participantsByEventId,
+	getAllUsers,
 	postparticipation,
 	putparticipation
 }

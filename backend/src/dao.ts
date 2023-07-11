@@ -39,6 +39,11 @@ export const getUserById = async (userId: number) => {
 	}
 }
 
+export const getUsers = async () => {
+	const result = await executeQuery(query.getAllUsers)
+	return result.rows
+}
+
 
 // Events
 export const getEvents = async () => {

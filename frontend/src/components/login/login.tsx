@@ -1,9 +1,10 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
+import { useOutletContext } from 'react-router-dom'
 
 function LoginForm() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-
+	const setLoggedIn: React.Dispatch<React.SetStateAction<boolean>> = useOutletContext()
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault()
@@ -18,26 +19,11 @@ function LoginForm() {
 				}
 			})
 			console.log(response)
-			//const token = await response.json()
-			const reader = response.body?.getReader()
-			
-			let result = ''
+			const token = await response.json()
+			setLoggedIn(true)
+			console.log(token)
 
-			if(reader) {
-				// eslint-disable-next-line no-constant-condition
-				while (true) {
-					const { done, value } = await reader.read()	
-					if (done) {
-						break
-					}
-					result += value
-				}	
-			}
-
-			const resultToArr = result.split(',')
-			const resultToToken = resultToArr.map(num => String.fromCharCode(Number(num))).join('')
-			localStorage.setItem('token', resultToToken)
-
+			localStorage.setItem('token', token)
 
 		} catch (error) {
 			console.log('Error login in:', error)

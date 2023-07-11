@@ -1,7 +1,14 @@
 import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import argon2 from 'argon2'
-import { addUser, getUserByUsername } from '../dao'
+import { addUser, getUserByUsername, getUsers } from '../dao'
+import { authenticate } from '../middleware'
+
+interface CustomRequest extends Request {
+	logged_in?: boolean
+	user_id?: number
+}
+
 const usersRouter = express.Router()
 
 const secret = process.env.SECRET
@@ -49,6 +56,14 @@ usersRouter.post('/login', async (req: Request, res: Response) => {
 	const token = jwt.sign({ username, id }, secret)
 	res.status(200).json(token)
 
+})
+
+usersRouter.get('/', authenticate, async (req: CustomRequest, res: Response) => {
+	const user = await getUsers()
+	if (!req.logged_in) {
+		return res.status(400).send('Not logged in')
+	}
+	res.send(user)
 })
 
 export default usersRouter
