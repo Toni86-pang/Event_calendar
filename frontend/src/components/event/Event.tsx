@@ -7,6 +7,7 @@ interface Event {
   content: string
   isPrivate: boolean
   date_time: string
+  user_id: number
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,6 +59,7 @@ export default function Event() {
       <p>Content: {currentEvent && currentEvent.content}</p>
       <p>Private: {currentEvent && (currentEvent.isPrivate ? 'Yes' : 'No')}</p>
       <p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
+      <p>Created by: {currentEvent && currentEvent.user_id}</p>
     </div>
   )
 }
