@@ -106,3 +106,19 @@ export const getInvitationsByUserId = async (userRecId: number) => {
 
 	return invitations.rows
 }
+
+
+// participants
+
+export const getParticipantsByEventId = async (eventId: number) => {
+	try {
+	  const result = await executeQuery(
+		query.participantsByEventId,
+		[eventId]
+	  );
+	  return result.rows;
+	} catch (error) {
+	  console.error('Error executing query:', error);
+	  throw error;
+	}
+  };

@@ -24,6 +24,9 @@ const getInvitationsByUserId = `
 	LEFT JOIN invitations ON invitations.event_id = events.event_id
 	WHERE events.private = false OR invitations.user_rec_id = $1;`
 
+	//participants
+	const participantsByEventId = ' SELECT participant_id, user_id, attendance FROM participants WHERE event_id = $1;'
+
 export default {
 	addUser,
 	checkIfUsernameExist,
@@ -37,5 +40,6 @@ export default {
 	postComment,
 	addEvent,
 	postInvitation,
-	getInvitationsByUserId
+	getInvitationsByUserId,
+	participantsByEventId,
 }
