@@ -1,8 +1,8 @@
-import ReactDOM  from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import EventList, {loader as eventsLoader} from './components/event/EventList'
-import Event, {loader as eventLoader} from './components/event/Event'
+import EventList, { loader as eventsLoader } from './components/event/EventList'
+import Event, { loader as eventLoader } from './components/event/Event'
 import ErrorPage from './ErrorPage'
 import Nav from './components/nav/navbar';
 import './Index.css'
@@ -11,7 +11,7 @@ import LoginForm from './components/login/login';
 import CreateEvent from './components/event/CreateEvent'
 
 
-const routes = createBrowserRouter ( [
+const routes = createBrowserRouter([
   {
     path: '/',
     element: <Nav />,
@@ -20,12 +20,12 @@ const routes = createBrowserRouter ( [
         path: '/events',
         element: <EventList />,
         loader: eventsLoader,
-        errorElement: <ErrorPage/>,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/register',
         element: <RegistrationForm onRegister={handleRegistrationFormSubmit} />,
-        errorElement: <ErrorPage/>,
+        errorElement: <ErrorPage />,
       },
       {
         path: '/login',
@@ -44,7 +44,7 @@ const routes = createBrowserRouter ( [
       }
 
     ],
-    
+    errorElement: <ErrorPage />,
 
   }
 ])
