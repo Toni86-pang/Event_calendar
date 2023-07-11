@@ -14,7 +14,6 @@ const routes = [
     element: (
       <>
         <Nav />
-        <App />
       </>
     ),
     children: [
