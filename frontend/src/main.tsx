@@ -29,7 +29,7 @@ const routes = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <LoginForm onSubmit={handleLoginFormSubmit} />,
+        element: <LoginForm />,
       },
       {
         path: '/events/event/:id',
@@ -62,8 +62,3 @@ function handleRegistrationFormSubmit(username: string, password: string) {
   console.log('Submitted registration form with password:', password);
 }
 
-function handleLoginFormSubmit(username: string, password: string) {
-  // Handle login form submission logic here
-  console.log('Submitted login form with username:', username);
-  console.log('Submitted login form with password:', password);
-}

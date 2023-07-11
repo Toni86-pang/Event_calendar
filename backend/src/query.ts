@@ -27,6 +27,8 @@ const getInvitationsByUserId = `
 
 //participants
 const participantsByEventId = ' SELECT participant_id, user_id, attendance FROM participants WHERE event_id = $1;'
+const postparticipation = 'INSERT INTO participants (event_id, user_id, attendance)VALUES ($1, $2, $3)RETURNING *;'
+const putparticipation = 'UPADTE participants SET attendace = $2 WHERE participant_id = $1 RETURNING *; '
 
 export default {
 	addUser,
@@ -44,4 +46,6 @@ export default {
 	modifyEvent,
 	getInvitationsByUserId,
 	participantsByEventId,
+	postparticipation,
+	putparticipation
 }
