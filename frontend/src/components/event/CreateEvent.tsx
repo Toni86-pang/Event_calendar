@@ -135,86 +135,86 @@ function CreateEvent() {
 			{newEvent && <h1>Create event</h1> }
 			{!newEvent && <h1>Modify event</h1> }
 			<form onSubmit={onSubmit}>
-				<div className="form-group">
-					<label htmlFor="title">Name of event: </label>
+				<div className='form-group'>
+					<label htmlFor='title'>Name of event: </label>
 					<input
-						type="text"
-						name="title"
+						type='text'
+						name='title'
 						maxLength={75}
-						id="title"
+						id='title'
 						value={title}
-						placeholder="Add event name..."
+						placeholder='Add event name...'
 						required
 						onChange={e => { setTitle(e.target.value) }}
 					/>
 				</div>
-				<div className="form-group">
-					<label htmlFor="content">Content: </label>
+				<div className='form-group'>
+					<label htmlFor='content'>Content: </label>
 					<input
-						type="text"
-						name="content"
+						type='text'
+						name='content'
 						maxLength={500}
-						id="content"
+						id='content'
 						value={content}
-						placeholder="Add content..."
+						placeholder='Add content...'
 						required
 						onChange={e => { setContent(e.target.value) }}
 					/>
 				</div>
-				<div className="form-group-radio">
-					<label htmlFor="isPrivate">Private: </label>
+				<div className='form-group-radio'>
+					<label htmlFor='isPrivate'>Private: </label>
 					<input
-						type="radio"
-						name="isPrivate"
+						type='radio'
+						name='isPrivate'
 						value='true'
-						id="isPrivate"
+						id='isPrivate'
 						checked={isPrivate}
 						required
 						onChange={handlePrivate}
 					/>
 				</div>
-				<div className="form-group-radio">
-					<label htmlFor="isPrivate">Public: </label>
+				<div className='form-group-radio'>
+					<label htmlFor='isPrivate'>Public: </label>
 					<input
-						type="radio"
-						name="isPrivate"
+						type='radio'
+						name='isPrivate'
 						value='false'
-						id="isPrivate"
+						id='isPrivate'
 						checked={!isPrivate}
 						required
 						onChange={handlePrivate}
 					/>
 				</div>
-				<div className="form-group">
-					<label htmlFor="date">Date of event: </label>
+				<div className='form-group'>
+					<label htmlFor='date'>Date of event: </label>
 					<input
-						type="date"
-						name="date"
-						id="date"
+						type='date'
+						name='date'
+						id='date'
 						value={date}
 						required
 						onChange={e => { setDate(e.target.value) }}
 					/>
 				</div>
-				<div className="form-group">
-					<label htmlFor="time">Time of event: </label>
+				<div className='form-group'>
+					<label htmlFor='time'>Time of event: </label>
 					<input
-						type="time"
-						name="time"
-						id="time"
+						type='time'
+						name='time'
+						id='time'
 						value={time}
 						required
 						onChange={e => { setTime(e.target.value) }}
 					/>
 				</div>
-				<div className="form-group">
-					<button className="submit"
-						type="submit"
+				<div className='form-group'>
+					<button className='submit'
+						type='submit'
 						disabled={check()}>
 						{newEvent?'Create':'Modify'} event
 					</button>
-					<button onClick={() => navigate('/')} className="close"
-						type="reset">
+					<button onClick={() => navigate('/')} className='close'
+						type='reset'>
                         Cancel
 					</button>
 					<button onClick={reset}>Reset</button>
