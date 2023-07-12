@@ -11,7 +11,7 @@ interface Event {
 	date_time: string
 	user_id: number
 	attendanceCount?: {
-	[key: string]: number;
+		[key: string]: number;
 		yesCount: number
 		noCount: number
 		maybeCount: number
@@ -70,49 +70,54 @@ export default function Event() {
 		getUsers()
 	}, [])
 
-useEffect(() => {
-    const getEventInfo = async () => {
-      try {
-        const eventResponse = await fetch('/api/events/event/' + id)
-        const event = await eventResponse.json() as Event[]
-        if (event.length > 0) {
-          setCurrentEvent(event[0])
-          console.log('All works')
-        } else {
-          setCurrentEvent(null)
-        }
-      } catch (error) {
-        console.log('Error fetching event data:', error)
-      }
-      getParticipants()
-    }
-
-	const getParticipants = async () => {
-		try {
-		  const participantsResponse = await fetch('/api/participants/' + id)
-		  const data = await participantsResponse.json()
-	  
-		  const participants = data.participants // Access the participants array
-	  
-		  console.log('Participants:', participants)
-	  
-		  const yesCount = participants.filter((participant: any) => participant.attendance === 'yes').length
-		  const noCount = participants.filter((participant: any) => participant.attendance === 'no').length
-		  const maybeCount = participants.filter((participant: any) => participant.attendance === 'maybe').length
-	  
-		  setCurrentEvent(prevEvent => ({
-			...prevEvent!,
-			attendanceCount: {
-			  yesCount,
-			  noCount,
-			  maybeCount
+	useEffect(() => {
+		const getEventInfo = async () => {
+			try {
+				const eventResponse = await fetch('/api/events/event/' + id)
+				const event = await eventResponse.json() as Event[]
+				if (event.length > 0) {
+					setCurrentEvent(event[0])
+					console.log('All works')
+				} else {
+					setCurrentEvent(null)
+				}
+			} catch (error) {
+				console.log('Error fetching event data:', error)
 			}
-		  }))
-		} catch (error) {
-		  console.log('Error fetching participants:', error)
+			getParticipants()
+		}
+
+		const getParticipants = async () => {
+			try {
+				const participantsResponse = await fetch('/api/participants/' + id)
+				const data = await participantsResponse.json()
+
+				const participants = data.participants // Access the participants array
+
+				console.log('Participants:', participants)
+
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const yesCount = participants.filter((participant: any) => participant.attendance === 'yes').length
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const noCount = participants.filter((participant: any) => participant.attendance === 'no').length
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const maybeCount = participants.filter((participant: any) => participant.attendance === 'maybe').length
+
+				setCurrentEvent(prevEvent => ({
+					...prevEvent!,
+					attendanceCount: {
+						yesCount,
+						noCount,
+						maybeCount
+					}
+				}))
+			} catch (error) {
+				console.log('Error fetching participants:', error)
+			}
+			
 		}
 		getEventInfo()
-	}, [id, userId])
+	}, [id])
 
 	const getComments = async () => {
 		try {
@@ -146,13 +151,13 @@ useEffect(() => {
 		const findUserName = users?.find(user => user.user_id === comment.user_id)
 
 		const keyId = nanoid()
-		return (	
-					<li className='commentItem' key={keyId} >
-						<p>{comment.comment}</p>
-						<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
-							: <span className='commenterName'>Anon </span>}
-							{formatDateTime(comment.commentdate)}</p>
-					</li>
+		return (
+			<li className='commentItem' key={keyId} >
+				<p>{comment.comment}</p>
+				<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
+					: <span className='commenterName'>Anon </span>}
+					{formatDateTime(comment.commentdate)}</p>
+			</li>
 		)
 	})
 
@@ -188,15 +193,15 @@ useEffect(() => {
 		getComments()
 
 	}
-	
+
 	return (
 
 		<div className='events'>
 			<h2>{currentEvent && currentEvent.title}</h2>
 			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
 			<p>{currentEvent?.content}</p>
-			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId }}><button>Edit event</button></Link> : ''}
-			<p>{currentEvent && (currentEvent.private?'Private':'Public')} event</p>
+			{/* {currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId }}><button>Edit event</button></Link> : ''} */}
+			<p>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
 			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
@@ -206,14 +211,14 @@ useEffect(() => {
 					<input className='commentInput' type='text' value={comment} onChange={handleComment} />
 					<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
 				</div>
-				{renderComments?
-				<div className='commentScrollField'>
-					{renderComments}
-				</div> : <></>}
-				</ul>
-		
+				{renderComments ?
+					<div className='commentScrollField'>
+						{renderComments}
+					</div> : <></>}
+			</ul>
+
 		</div>
-	
+
 	)
 }
 
