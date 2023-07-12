@@ -43,6 +43,7 @@ ENV PG_SSL=${PG_SSL}
 COPY --from=builder ./backend/package*.json ./
 COPY --from=builder ./backend/dist ./dist
 COPY --from=builder ./frontend/dist ./dist/client
+COPY --from=builder ./frontend/src/img ./dist/client/img
 RUN npm ci --omit=dev
 
 EXPOSE ${PORT}
