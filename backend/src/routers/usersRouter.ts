@@ -58,11 +58,9 @@ usersRouter.post('/login', async (req: Request, res: Response) => {
 
 })
 
-usersRouter.get('/', authenticate, async (req: CustomRequest, res: Response) => {
+// Get all users
+usersRouter.get('/', async (req: CustomRequest, res: Response) => {
 	const user = await getUsers()
-	if (!req.logged_in) {
-		return res.status(400).send('Not logged in')
-	}
 	res.send(user)
 })
 
