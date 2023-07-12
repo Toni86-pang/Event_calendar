@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { useLoaderData } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
@@ -80,12 +81,13 @@ export default function Event() {
 	
 	const renderComments = eventComments?.map(comment => {
 		const keyId = nanoid()
-		return (<li key={keyId}>
-			<p>posted: {comment.user_id? comment.user_id : 'Anon'}</p>
-			<p>post: {comment.comment}</p>
-			<p>date: {comment.commentdate}</p>
-		</li>
-		)
+		return (<li className='commentItem' key={keyId}>
+							<p>{comment.comment}</p>
+							<p>posted by: {comment.user_id? <span className='commenterName'>{comment.user_id} </span>
+																						: <span className='commenterName'>Anon </span>}
+																						{formatDateTime(comment.commentdate)}</p>
+						</li>
+						)
 	}) 
 
 
@@ -116,18 +118,18 @@ export default function Event() {
 	return (
 		
 		<div className='events'>
-			<h3>
-        Title: {currentEvent && currentEvent.title}
-			</h3>
-			<p>Content: {currentEvent && currentEvent.content}</p>
-			<p>Private: {currentEvent && (currentEvent.isPrivate ? 'Yes' : 'No')}</p>
+			<h2>
+        {currentEvent && currentEvent.title}
+			</h2>
+			<p>{currentEvent && currentEvent.content}</p>
+			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
 			<h3>Comment Section</h3>
-			<div>
-				<input type='text' value={comment} onChange={handleComment} />
-				<button onClick={handlePostComment}>Add Comment</button>
+			<ul className='commentWrapper'>
+			<div className='commentInputWrap'>
+				<input className='commentInput' type='text' value={comment} onChange={handleComment} />
+				<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
 			</div>
-			<ul>
 				{renderComments}
 			</ul>
 		</div>
