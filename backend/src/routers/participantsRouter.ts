@@ -64,5 +64,5 @@ participantsRouter.get('/participants/:id', authenticate, async (req: CustomRequ
 
 })
 
-  
+
 export default participantsRouter
