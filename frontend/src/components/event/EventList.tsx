@@ -4,12 +4,12 @@ import { nanoid } from 'nanoid'
 import './Events.css'
 
 interface Event {
-    event_id?: string
-		user_id?: number
-    title: string
-    content?: string
-    isPrivate?: boolean
-    date_time: string
+	event_id?: string
+	user_id?: number
+	title: string
+	content?: string
+	private?: boolean
+	date_time: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,7 +20,7 @@ export function loader({ params }: any) {
 
 const EventList = () => {
 
-	let userId: number|null
+	let userId: number | null
 
 	try {
 		userId = useLocation().state.userId
@@ -40,8 +40,18 @@ const EventList = () => {
 	useEffect(() => {
 		const getEvents = async () => {
 			try {
+				let response: Response
+				if (userId) {
+					console.log('eventlist userId: ', userId)
+					response = await fetch('/api/events', {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem('token')}`
+						}
+					})
+				} else {
+					response = await fetch('/api/events')
+				}
 
-				const response = await fetch('/api/events')
 				const events = await response.json() as Array<Event>
 				setEvents(events)
 				setAllEvents(events)
@@ -82,7 +92,7 @@ const EventList = () => {
 
 		return (
 			<li key={'event' + event.event_id + i}>
-				<Link to={'event/' + event.event_id } state={{userId}}>
+				<Link to={'event/' + event.event_id} state={{userId}}>
 					<p>
 						{event.title}: {formattedDateTime}
 					</p>
