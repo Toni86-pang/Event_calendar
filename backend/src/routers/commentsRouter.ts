@@ -18,7 +18,8 @@ const commentsRouter = express.Router()
 // Post comment
 commentsRouter.post('/', async (req: CustomRequest, res: Response) => {
 	
-	if(!req.body) return res.status(401).send('no body')
+	if(!req.body) return res.status(400).send('no body')
+	if(req.body.comment === '') return res.status(400).send('no text')
 
 	const user_id = req.logged_in ? req.user_id : null 
 
@@ -33,7 +34,6 @@ commentsRouter.get('/:eventId', async (req: CustomRequest, res: Response) => {
 	const comment: Comment[] = await getCommentByEventId(commentId)
 
 	if(!comment[0]) return res.status(200).json({})
-	console.log(comment)
 	res.send(comment)
 })
 

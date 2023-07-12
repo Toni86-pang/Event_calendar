@@ -20,6 +20,16 @@ interface Comment {
 	
 }
 
+interface User {
+	user_id: number
+	username: string
+}
+
+interface User {
+	user_id: number
+	username: string
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loader({ params }: any) {
 
@@ -31,7 +41,28 @@ export default function Event() {
 	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
-  
+	const [users, setUsers] = useState<Array<User> | null>(null)
+
+	useEffect(() => {
+	const getUsers = async() => {
+		try {
+			const response = await fetch('/api/users/')
+			const users = await response.json()
+			if (users.length > 0) {
+				setUsers(users)
+				console.log('users fetched', users)
+			} else {
+				setUsers(null)
+				console.log('No Comments', users)
+			}
+		} catch (error) {
+			console.log('Error fetching comments:', error)
+		}
+	}
+
+	getUsers()
+}, [])
+
 	useEffect(() => {
 	  const getEventInfo = async () => {
 		try {
@@ -56,7 +87,7 @@ export default function Event() {
 	  }
 	  getEventInfo()
 	}, [id])
-	
+
 	const getComments = async() => {
 		try {
 			const response = await fetch('/api/comments/' + id)
@@ -85,10 +116,13 @@ export default function Event() {
 
 	
 	const renderComments = eventComments?.map(comment => {
+
+		const findUserName = users?.find( user => user.user_id === comment.user_id)
+
 		const keyId = nanoid()
 		return (<li className='commentItem' key={keyId}>
 							<p>{comment.comment}</p>
-							<p>posted by: {comment.user_id? <span className='commenterName'>{comment.user_id} </span>
+							<p>posted by: {findUserName?.username? <span className='commenterName'>{findUserName?.username} </span>
 																						: <span className='commenterName'>Anon </span>}
 																						{formatDateTime(comment.commentdate)}</p>
 						</li>
@@ -102,14 +136,22 @@ export default function Event() {
 	const handlePostComment = async () => {
 		console.log('posted!')
 		const body = JSON.stringify({eventId: id, comment: comment})
+
+		const headers = new Headers()
+		if (localStorage.getItem('token')) {
+			headers.append('Content-type', 'application/json')
+			headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)				
+			}
+		else {
+			headers.append('Content-type', 'application/json')
+		}
+		console.log(headers, comment, id, body)
+
 		try {
 			await fetch('/api/comments/', {
 				method: 'POST',
 				body: body,
-				headers: {
-					'Content-type': 'application/json',
-					'Authorization': 'Bearer ' + localStorage.getItem('token')
-				}
+				headers: headers
 			})
 		} catch(error) {
 			console.log('Error posting comment:', error)
