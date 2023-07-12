@@ -68,7 +68,7 @@ eventsRouter.delete('/event/:id', async (req: CustomRequest, res: Response) => {
 	if(event[0].user_id !== userId) return res.status(400).send('Not your event')
 
 	await deleteEventById(eventId)
-	await deleteCommentByEventId(eventId)
+	await deleteCommentByEventId(Number(eventId))
 	
 	res.send('event deleted')
 })

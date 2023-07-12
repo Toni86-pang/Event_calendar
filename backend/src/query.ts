@@ -3,12 +3,15 @@ const addUser = 'INSERT INTO users (username, password_hash) VALUES ($1, $2) RET
 const checkIfUsernameExist = 'SELECT * FROM users WHERE username = $1;'
 const checkIfUserIdExist = 'SELECT * FROM users WHERE user_id = $1;'
 const getAllUsers = 'SELECT user_id, username FROM users;'
+const deleteUserById = 'DELETE FROM users WHERE user_id = $1;'
+
 
 // Events
 const allEvents = 'SELECT event_id, title, private, date_time FROM events ORDER BY date_time;'
 const eventsByUserId = 'SELECT event_id, title, content, private, date_time FROM events WHERE user_id = $1;'
 const eventsById = 'SELECT user_id, title, content, private, date_time FROM events WHERE event_id = $1;'
 const deleteEventById = 'DELETE FROM events WHERE event_id = $1;'
+const deleteEventsByUserId = 'DELETE FROM events WHERE user_id = $1;'
 const deleteCommentsInEvent = 'DELETE FROM comments WHERE event_id = $1'
 const addEvent = 'INSERT INTO events (user_id, title, content, private, date_time) VALUES ($1, $2, $3, $4, $5) RETURNING *;'
 const modifyEvent = 'UPDATE events SET title = $2, content = $3, private = $4, date_time = $5 WHERE event_id = $1'
@@ -25,11 +28,13 @@ const getInvitationsByUserId = `
 	FROM events
 	LEFT JOIN invitations ON invitations.event_id = events.event_id
 	WHERE events.private = false OR invitations.user_rec_id = $1;`
+const deleteEventInvitations = 'DELETE FROM invitations WHERE event_id = $1;'
 
 //participants
 const participantsByEventId = ' SELECT participant_id, attendance FROM participants WHERE event_id = $1;'
 const postparticipation = 'INSERT INTO participants (event_id, user_id, attendance)VALUES ($1, $2, $3)RETURNING *;'
 const putparticipation = 'UPADTE participants SET attendace = $2 WHERE participant_id = $1 RETURNING *; '
+const deleteEventParticipants = 'DELETE FROM participants WHERE event_id = $1;'
 
 export default {
 	addUser,
@@ -49,5 +54,9 @@ export default {
 	participantsByEventId,
 	getAllUsers,
 	postparticipation,
-	putparticipation
+	putparticipation,
+	deleteUserById,
+	deleteEventsByUserId,
+	deleteEventParticipants,
+	deleteEventInvitations
 }
