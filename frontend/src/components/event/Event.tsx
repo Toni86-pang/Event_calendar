@@ -10,12 +10,19 @@ interface Event {
   isPrivate: boolean
   date_time: string
   user_id: number
+  participantCount: number
 }
 
 interface Comment {
 	user_id: number
 	comment: string
 	commentdate: string
+	
+}
+
+interface User {
+	user_id: number
+	username: string
 }
 
 interface User {
@@ -30,7 +37,6 @@ export function loader({ params }: any) {
 }
 
 export default function Event() {
-
 	const id = useLoaderData() as string
 	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
@@ -58,25 +64,29 @@ export default function Event() {
 }, [])
 
 	useEffect(() => {
-		const getEventInfo = async () => {
-			try {
-	
-				const response = await fetch('/api/events/event/' + id)
-				const event = await response.json() as Event[]
-				if (event.length > 0) {
-					setCurrentEvent(event[0])
-					console.log('All works')
-				} else {
-					setCurrentEvent(null)
-				}
-			} catch (error) {
-				console.log('Error fetching event data:', error)
-			}
-			getComments()
+	  const getEventInfo = async () => {
+		try {
+		  const eventResponse = await fetch('/api/events/event/' + id)
+		  const event = await eventResponse.json() as Event[]
+		  if (event.length > 0) {
+			const updatedEvent = { ...event[0] }
+			setCurrentEvent(updatedEvent)
+			console.log('All works')
+  
+			const participantsResponse = await fetch('/api/participants/' + id)
+			const participants = await participantsResponse.json()
+			const participantCount = participants.length
+			setCurrentEvent(prevEvent => ({ ...prevEvent!, participantCount }))
+		  } else {
+			setCurrentEvent(null)
+		  }
+		} catch (error) {
+		  console.log('Error fetching event data:', error)
 		}
-		getEventInfo()
+		getComments()
+	  }
+	  getEventInfo()
 	}, [id])
-	
 
 	const getComments = async() => {
 		try {
@@ -161,6 +171,7 @@ export default function Event() {
 			<p>{currentEvent && currentEvent.content}</p>
 			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
+			<p>Participant count: {currentEvent && currentEvent.participantCount}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
 			<div className='commentInputWrap'>
