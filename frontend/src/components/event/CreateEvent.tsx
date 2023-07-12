@@ -9,7 +9,7 @@ function CreateEvent() {
 	const [isPrivate, setPrivate] = useState(false)
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('')
-	const [eventId] = useState<number|null>(useLocation().state.eventId)	
+	const [eventId] = useState<number>(useLocation().state.eventId)	
 	const [newEvent, setNewEvent] = useState(true)
 
 	const navigate = useNavigate()
@@ -17,7 +17,7 @@ function CreateEvent() {
 	const token = localStorage.getItem('token')
 
 	useEffect(() => {
-		if(eventId) setNewEvent(false)
+		if(eventId>0) setNewEvent(false)
 		console.log('newEvent: ', newEvent)
 
 	}, [eventId])
