@@ -140,10 +140,7 @@ export const getParticipantsByEventId = async (eventId: number) => {
 
 export const createParticipant = async (eventId: number, userId: number, attendance: string) => {
 	try {
-		const result = await executeQuery(
-			query.postparticipation,
-			[eventId, userId, attendance]
-		)
+		const result = await executeQuery(query.postparticipation, [eventId, userId, attendance])
 		return result.rows[0]
 	} catch (error) {
 		console.error('Error executing query:', error)
@@ -152,15 +149,15 @@ export const createParticipant = async (eventId: number, userId: number, attenda
 }
 
 
-//   export const putParticipant = async (eventId: number, userId: number, attendance: string) => {
-// 	try {
-// 	  const result = await executeQuery(
-// 		query.,
-// 		[eventId, userId, attendance]
-// 	  );
-// 	  return result.rows[0];
-// 	} catch (error) {
-// 	  console.error('Error executing query:', error);
-// 	  throw error;
-// 	}
-//   };
+export const updateParticipant = async (eventId: number, userId: number, attendance: string) => {
+	try {
+		const result = await executeQuery(
+			query.updateParticipant,
+			[attendance, eventId, userId]
+		)
+		return result.rows[0]
+	} catch (error) {
+		console.error('Error executing query:', error)
+		throw error
+	}
+}
