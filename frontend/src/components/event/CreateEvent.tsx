@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import './CreateEvent.css'
 
 // interface Props {
 //     newEvent: boolean
@@ -130,7 +131,7 @@ function CreateEvent() {
 	}
 
 	return (
-		<div>
+		<div className='form'>
 			{newEvent && <h1>Create event</h1> }
 			{!newEvent && <h1>Modify event</h1> }
 			<form onSubmit={onSubmit}>
