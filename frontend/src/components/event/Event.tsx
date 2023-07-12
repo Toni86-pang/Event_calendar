@@ -143,12 +143,13 @@ export default function Event() {
 		const findUserName = users?.find(user => user.user_id === comment.user_id)
 
 		const keyId = nanoid()
-		return (<li className='commentItem' key={keyId}>
-			<p>{comment.comment}</p>
-			<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
-				: <span className='commenterName'>Anon </span>}
-				{formatDateTime(comment.commentdate)}</p>
-		</li>
+		return (	
+					<li className='commentItem' key={keyId} >
+						<p>{comment.comment}</p>
+						<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
+							: <span className='commenterName'>Anon </span>}
+							{formatDateTime(comment.commentdate)}</p>
+					</li>
 		)
 	})
 
@@ -196,7 +197,7 @@ export default function Event() {
 		<div className='events'>
 			<h2>{currentEvent && currentEvent.title}</h2>
 			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
-
+			<p>{currentEvent?.content}</p>
 			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId }}><button>Edit event</button></Link> : ''}
 			<p>{currentEvent && (currentEvent.private?'Private':'Public')} event</p>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
@@ -208,8 +209,12 @@ export default function Event() {
 					<input className='commentInput' type='text' value={comment} onChange={handleComment} />
 					<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
 				</div>
-				{renderComments}
-			</ul>
+				{renderComments?
+				<div className='commentScrollField'>
+					{renderComments}
+				</div> : <></>}
+				</ul>
+		
 		</div>
 	)
 }

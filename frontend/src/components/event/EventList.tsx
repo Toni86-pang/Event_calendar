@@ -92,9 +92,12 @@ const EventList = () => {
 
 		return (
 			<li key={'event' + event.event_id + i}>
-				<Link to={'event/' + event.event_id} state={{userId}}>
-					<p>
-						{event.title}: {formattedDateTime}
+				<Link className='eventLink' to={'event/' + event.event_id} state={{userId}}>
+					<p className='linkDate'>
+						{formattedDateTime}
+					</p>
+					<p className='linkTitle'>
+						{event.title}
 					</p>
 				</Link>
 			</li>
@@ -102,16 +105,18 @@ const EventList = () => {
 	})
 
 	const filterMyEvents = allEvents.filter(event => event.user_id === userId)
-	console.log(userId, filterMyEvents)
 	const myEvents = filterMyEvents.map( event => {
 		const formattedDateTime = formatDateTime(event.date_time)
 		const keyId = nanoid()
 
 		return (
 			<li key={keyId}>
-				<Link to={'event/' + event.event_id } state={{userId}}>
-					<p>
-						{event.title}: {formattedDateTime}
+				<Link className='eventLink' to={'event/' + event.event_id } state={{userId}}>
+					<p className='linkDate'>
+						{formattedDateTime}
+					</p>
+					<p className='linkTitle'>
+						{event.title}
 					</p>
 				</Link>
 			</li>
@@ -125,10 +130,12 @@ const EventList = () => {
 				<div className='leftColumn'>
 					<div className='eventsWrapper'>
 						<input onChange={handleChange} type='text'></input>
-						{myEvents.length>0?<ul className='myEvents'>
+						<h3>My events</h3>
+						{myEvents.length > 0 ? <ul className='myEvents'>
 							{myEvents} 
 						</ul> 
 							: <></>}
+						<h3>Upcoming events</h3>
 						<ul className='eventList'>
 							{eventNavigation}
 						</ul>

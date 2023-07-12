@@ -15,12 +15,12 @@ export default function Nav() {
 	return (
 		<div className='body'>
 			<nav>
-				<Link className='link' to='/'><button>Home</button></Link>
-				<Link className='link' to='/events' state={{userId}}><button>Events</button></Link>
-				{loggedIn && <Link className='link' to='/events/create' state={{userId:-1}}><button>New event</button></Link> }
-				<Link className='link' to='/register'><button>Register</button></Link>
-				{loggedIn ? <Link className='link' to='/' onClick={handleLogout}><button>Logout</button></Link>
-									: <Link className='link' to='/login'><button>Login</button></Link>
+				<Link className='navLink' to='/'><button>Home</button></Link>
+				<Link className='navLink' to='/events' state={{userId}}><button>Events</button></Link>
+				{loggedIn && <Link className='navLink' to='/events/create' state={{userId:-1}}><button>New event</button></Link> }
+				<Link className='navLink' to='/register'><button>Register</button></Link>
+				{loggedIn ? <Link className='navLink' to='/' onClick={handleLogout}><button>Logout</button></Link>
+									: <Link className='navLink' to='/login'><button>Login</button></Link>
 				}
 			</nav>
 			<Outlet context={{setLoggedIn, setUserId}}/>
