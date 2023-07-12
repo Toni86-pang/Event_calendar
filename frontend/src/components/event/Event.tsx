@@ -118,11 +118,11 @@ export default function Event() {
 	return (
 		
 		<div className='events'>
-			<h3>
-        Title: {currentEvent && currentEvent.title}
-			</h3>
-			<p>Content: {currentEvent && currentEvent.content}</p>
-			<p>Private: {currentEvent && (currentEvent.isPrivate ? 'Yes' : 'No')}</p>
+			<h2>
+        {currentEvent && currentEvent.title}
+			</h2>
+			<p>{currentEvent && currentEvent.content}</p>
+			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
