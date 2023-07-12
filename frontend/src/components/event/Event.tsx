@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
 
 interface Event {
-	event_id?: string
-	title: string
-	content: string
-	isPrivate: boolean
-	date_time: string
-	user_id: number
-	participantCount: number
+  event_id?: string
+  title: string
+  content: string
+  isPrivate: boolean
+  date_time: string
+  user_id: number
+  attendanceCount?: {
+    yesCount: number
+    noCount: number
+    maybeCount: number
+  }
 }
 
 interface Comment {
@@ -130,13 +134,13 @@ export default function Event() {
 
 		const keyId = nanoid()
 		return (<li className='commentItem' key={keyId}>
-			<p>{comment.comment}</p>
-			<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
-				: <span className='commenterName'>Anon </span>}
-				{formatDateTime(comment.commentdate)}</p>
-		</li>
-		)
-	})
+							<p>{comment.comment}</p>
+							<p>posted by: {findUserName?.username? <span className='commenterName'>{findUserName?.username} </span>
+																						: <span className='commenterName'>Anon </span>}
+																						{formatDateTime(comment.commentdate)}</p>
+						</li>
+						)
+	}) 
 
 
 	const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,7 +190,9 @@ export default function Event() {
 			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{eventId}}><button>Edit event</button></Link> : ''}
 			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
-			<p>Participant count: {currentEvent && currentEvent.participantCount}</p>
+			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
+     		<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
+      		<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
 				<div className='commentInputWrap'>
