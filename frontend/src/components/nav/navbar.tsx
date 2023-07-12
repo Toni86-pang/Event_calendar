@@ -17,7 +17,7 @@ export default function Nav() {
 			<nav>
 				<Link className='link' to='/'><button>Home</button></Link>
 				<Link className='link' to='/events' state={{userId}}><button>Events</button></Link>
-				{loggedIn && <Link className='link' to='/events/create'><button>New event</button></Link> }
+				{loggedIn && <Link className='link' to='/events/create' state={{userId:-1}}><button>New event</button></Link> }
 				<Link className='link' to='/register'><button>Register</button></Link>
 				{loggedIn ? <Link className='link' to='/' onClick={handleLogout}><button>Logout</button></Link>
 									: <Link className='link' to='/login'><button>Login</button></Link>
