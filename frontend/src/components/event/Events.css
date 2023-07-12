@@ -11,3 +11,36 @@
     padding-right: 60px;
     line-height: 27px;
 }
+
+.form {
+    width: 45%;
+    margin: 0 auto;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.form-group-radio {
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.form-group-radio input {
+    float:inline-end;
+    margin-right: 50%;
+}
+
+.submit {
+    margin-right: 15px;
+}
+
+.close {
+    margin-right: 15px;
+}

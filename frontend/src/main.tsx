@@ -5,7 +5,7 @@ import EventList, { loader as eventsLoader } from './components/event/EventList'
 import Event, { loader as eventLoader } from './components/event/Event'
 import ErrorPage from './ErrorPage'
 import Nav from './components/nav/navbar'
-import './Index.css'
+import './main.css'
 import RegistrationForm from './components/register/register'
 import LoginForm from './components/login/login'
 import CreateEvent from './components/event/CreateEvent'
@@ -54,8 +54,8 @@ const routes = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<RouterProvider router={routes} /> 
-		<img className='construct' alt='workwork' src={'./src/img/pngwing.com.png'} />
+		<RouterProvider router={routes} />
+		<img className='construct' src='./img/pngwing.com.png' />
 	</React.StrictMode>,
 )
 
