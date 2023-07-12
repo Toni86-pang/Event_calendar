@@ -2,46 +2,25 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import './Events.css'
 
-// interface Props {
-//     newEvent: boolean
-//     eventId?: number
-// }
-
-// interface Event {
-//     user_id: number
-//     title: string
-//     content: string
-//     private: boolean
-//     date_time: string
-// }
-
-
 function CreateEvent() {
-	
-
-	let newEvent = true
-
-	let eventId: number|null
-
-	try {
-		eventId = useLocation().state.eventId
-
-	} catch {
-		eventId = null
-	}
-	if(eventId) newEvent = false
-	console.log('eventId', eventId)
-	console.log('newEvent:', newEvent)
 
 	const [title, setTitle] = useState('')
 	const [content, setContent] = useState('')
 	const [isPrivate, setPrivate] = useState(false)
 	const [date, setDate] = useState('')
 	const [time, setTime] = useState('')
+	const [eventId] = useState<number|null>(useLocation().state.eventId)	
+	const [newEvent, setNewEvent] = useState(true)
 
 	const navigate = useNavigate()
 	
 	const token = localStorage.getItem('token')
+
+	useEffect(() => {
+		if(eventId) setNewEvent(false)
+		console.log('newEvent: ', newEvent)
+
+	}, [eventId])
 
 	useEffect(() => {
 		let event
@@ -68,9 +47,7 @@ function CreateEvent() {
 	}
 
 	const check = () => {
-
-		return (!title || !content || !date || !time) 
-		
+		return (!title || !content || !date || !time) 		
 	}
 
 	const reset = () => {
@@ -136,8 +113,6 @@ function CreateEvent() {
 				console.error('Error modifying event:', error)
 			}
 		}
-
-
 
 		console.log('Title:' + title)
 		console.log('Content:' + content)
