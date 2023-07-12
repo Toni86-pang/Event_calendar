@@ -1,24 +1,38 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-interface Props {
-    newEvent: boolean
-    eventId?: number
-}
+// interface Props {
+//     newEvent: boolean
+//     eventId?: number
+// }
 
-interface Event {
-    user_id: number
-    title: string
-    content: string
-    private: boolean
-    date_time: string
-}
+// interface Event {
+//     user_id: number
+//     title: string
+//     content: string
+//     private: boolean
+//     date_time: string
+// }
 
-const dummyEvent: Event = { user_id: Infinity, title: '', content: '', private: false, date_time: '' }
 
-function CreateEvent({ newEvent, eventId }: Props) {
+function CreateEvent() {
+	
+
+	const newEvent = true
+	const eventId = -1
+
+	const [title, setTitle] = useState('')
+	const [content, setContent] = useState('')
+	const [isPrivate, setPrivate] = useState(false)
+	const [date, setDate] = useState('')
+	const [time, setTime] = useState('')
+
+	const navigate = useNavigate()
+	
+	const token = localStorage.getItem('token')
+
 	useEffect(() => {
-		let event: Event = dummyEvent
+		let event
 		if (!newEvent) {
 			const getEvent = async () => {
 				const result = await fetch('/api/events/event/' + eventId)
@@ -33,15 +47,6 @@ function CreateEvent({ newEvent, eventId }: Props) {
             
 		}
 	},[newEvent,eventId])
-
-
-	const [title, setTitle] = useState('')
-	const [content, setContent] = useState('')
-	const [isPrivate, setPrivate] = useState(false)
-	const [date, setDate] = useState('')
-	const [time, setTime] = useState('')
-
-	const navigate = useNavigate()
 
 	const handlePrivate = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setPrivate(e.target.value === 'true')
@@ -76,6 +81,7 @@ function CreateEvent({ newEvent, eventId }: Props) {
 				const response = await fetch('/api/events', {
 					method: 'POST',
 					headers: {
+						'Authorization': `Bearer ${token}`,
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify(eventData)

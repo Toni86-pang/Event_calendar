@@ -21,6 +21,14 @@ const routes = createBrowserRouter([
 				element: <EventList />,
 				loader: eventsLoader,
 				errorElement: <ErrorPage />,
+				children: [
+					{
+						path: '/events/event/:id',
+						element: <Event />,
+						loader: eventLoader,
+						errorElement: <ErrorPage />,
+					}
+				]
 			},
 			{
 				path: '/register',
@@ -32,14 +40,8 @@ const routes = createBrowserRouter([
 				element: <LoginForm />,
 			},
 			{
-				path: '/events/event/:id',
-				element: <Event />,
-				loader: eventLoader,
-				errorElement: <ErrorPage />,
-			},
-			{
 				path: 'events/create',
-				element: <CreateEvent newEvent={false} eventId={1}/>, // debug properties. mitä kautta annetaan lopullisessa appissa?
+				element: <CreateEvent />, // debug properties. mitä kautta annetaan lopullisessa appissa?
 				errorElement: <ErrorPage />
 			}
 
