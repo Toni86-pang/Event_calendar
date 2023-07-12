@@ -18,24 +18,29 @@ interface Participants {
 const participantsRouter = express.Router()
 
 // Get participants by eventid
-participantsRouter.get('/participants/:id', authenticate, async (req: CustomRequest, res: Response) => {
-	const eventId = req.params.id
+participantsRouter.get('/:id', authenticate, async (req: CustomRequest, res: Response) => {
+  try {
+    const eventId = req.params.id
 
-	const event: Participants[] = await getEventById(eventId)
+    const event: Participants[] = await getEventById(eventId)
+    
+    if (!event.length) {
+      return res.status(404).json({ error: 'Event not found' })
+    }
 
-	//  if (!event[0]) {
-	//    return res.status(404).send('No event');
-	//  }
-
-	//  if (!req.logged_in && event[0].private === true) {
-	//    return res.status(400).send('Private event');
-	//  }
-
-	const participants = await getParticipantsByEventId(parseInt(eventId, 10))
-	event[0].attendance = participants
-
-	res.send(event)
+    const participants = await getParticipantsByEventId(parseInt(eventId, 10))
+    const response = {
+      event: event[0],
+      participants: participants
+    }
+    
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error('Error retrieving participants:', error)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
 })
+
 
 participantsRouter.post('/event/:id/attendance', async (req: CustomRequest, res: Response) => {
 	const eventId = parseInt(req.params.id, 10)
@@ -63,6 +68,7 @@ participantsRouter.post('/event/:id/attendance', async (req: CustomRequest, res:
 // 	res.send(result)
 
 // })
+
 
 
 export default participantsRouter

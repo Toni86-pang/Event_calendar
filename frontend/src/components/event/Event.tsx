@@ -10,12 +10,24 @@ interface Event {
   isPrivate: boolean
   date_time: string
   user_id: number
+  participantCount: number
 }
 
 interface Comment {
 	user_id: number
 	comment: string
 	commentdate: string
+	
+}
+
+interface User {
+	user_id: number
+	username: string
+}
+
+interface User {
+	user_id: number
+	username: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,33 +37,57 @@ export function loader({ params }: any) {
 }
 
 export default function Event() {
-
 	const id = useLoaderData() as string
 	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
+	const [users, setUsers] = useState<Array<User> | null>(null)
 
 	useEffect(() => {
-		const getEventInfo = async () => {
-			try {
-	
-				const response = await fetch('/api/events/event/' + id)
-				const event = await response.json() as Event[]
-				if (event.length > 0) {
-					setCurrentEvent(event[0])
-					console.log('All works')
-				} else {
-					setCurrentEvent(null)
-				}
-			} catch (error) {
-				console.log('Error fetching event data:', error)
+	const getUsers = async() => {
+		try {
+			const response = await fetch('/api/users/')
+			const users = await response.json()
+			if (users.length > 0) {
+				setUsers(users)
+				console.log('users fetched', users)
+			} else {
+				setUsers(null)
+				console.log('No Comments', users)
 			}
-			getComments()
+		} catch (error) {
+			console.log('Error fetching comments:', error)
 		}
-		getEventInfo()
+	}
+
+	getUsers()
+}, [])
+
+	useEffect(() => {
+	  const getEventInfo = async () => {
+		try {
+		  const eventResponse = await fetch('/api/events/event/' + id)
+		  const event = await eventResponse.json() as Event[]
+		  if (event.length > 0) {
+			const updatedEvent = { ...event[0] }
+			setCurrentEvent(updatedEvent)
+			console.log('All works')
+  
+			const participantsResponse = await fetch('/api/participants/' + id)
+			const participants = await participantsResponse.json()
+			const participantCount = participants.length
+			setCurrentEvent(prevEvent => ({ ...prevEvent!, participantCount }))
+		  } else {
+			setCurrentEvent(null)
+		  }
+		} catch (error) {
+		  console.log('Error fetching event data:', error)
+		}
+		getComments()
+	  }
+	  getEventInfo()
 	}, [id])
-	
-	
+
 	const getComments = async() => {
 		try {
 			const response = await fetch('/api/comments/' + id)
@@ -80,10 +116,13 @@ export default function Event() {
 
 	
 	const renderComments = eventComments?.map(comment => {
+
+		const findUserName = users?.find( user => user.user_id === comment.user_id)
+
 		const keyId = nanoid()
 		return (<li className='commentItem' key={keyId}>
 							<p>{comment.comment}</p>
-							<p>posted by: {comment.user_id? <span className='commenterName'>{comment.user_id} </span>
+							<p>posted by: {findUserName?.username? <span className='commenterName'>{findUserName?.username} </span>
 																						: <span className='commenterName'>Anon </span>}
 																						{formatDateTime(comment.commentdate)}</p>
 						</li>
@@ -97,14 +136,22 @@ export default function Event() {
 	const handlePostComment = async () => {
 		console.log('posted!')
 		const body = JSON.stringify({eventId: id, comment: comment})
+
+		const headers = new Headers()
+		if (localStorage.getItem('token')) {
+			headers.append('Content-type', 'application/json')
+			headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)				
+			}
+		else {
+			headers.append('Content-type', 'application/json')
+		}
+		console.log(headers, comment, id, body)
+
 		try {
 			await fetch('/api/comments/', {
 				method: 'POST',
 				body: body,
-				headers: {
-					'Content-type': 'application/json',
-					'Authorization': 'Bearer ' + localStorage.getItem('token')
-				}
+				headers: headers
 			})
 		} catch(error) {
 			console.log('Error posting comment:', error)
@@ -124,6 +171,7 @@ export default function Event() {
 			<p>{currentEvent && currentEvent.content}</p>
 			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
+			<p>Participant count: {currentEvent && currentEvent.participantCount}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
 			<div className='commentInputWrap'>
