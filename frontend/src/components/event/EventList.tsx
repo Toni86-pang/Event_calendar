@@ -1,13 +1,13 @@
-import { Link, Outlet } from 'react-router-dom'
+import { useLocation, Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 import './Events.css'
 
 interface Event {
-    event_id?: string
-    title: string
-    content?: string
-    isPrivate?: boolean
-    date_time: string
+	event_id?: string
+	title: string
+	content?: string
+	private?: boolean
+	date_time: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,6 +17,15 @@ export function loader({ params }: any) {
 }
 
 const EventList = () => {
+
+	let userId: number | null
+
+	try {
+		userId = useLocation().state.userId
+
+	} catch {
+		userId = null
+	}
 
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
@@ -28,8 +37,18 @@ const EventList = () => {
 	useEffect(() => {
 		const getEvents = async () => {
 			try {
+				let response: Response
+				if (userId) {
+					console.log('eventlist userId: ', userId)
+					response = await fetch('/api/events', {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem('token')}`
+						}
+					})
+				} else {
+					response = await fetch('/api/events')
+				}
 
-				const response = await fetch('/api/events')
 				const events = await response.json() as Array<Event>
 				setEvents(events)
 
@@ -63,13 +82,13 @@ const EventList = () => {
 		const formattedTime = `${hours}:${minutes}`
 		return formattedDate + ' ' + formattedTime
 	}
-
+	console.log('eventlist userId:', userId)
 	const eventNavigation = eventList.map((event, i) => {
 		const formattedDateTime = formatDateTime(event.date_time)
 
 		return (
 			<li key={'event' + event.event_id + i}>
-				<Link to={'event/' + event.event_id}>
+				<Link to={'event/' + event.event_id} state={{ userId }}>
 					<p>
 						{event.title}: {formattedDateTime}
 					</p>

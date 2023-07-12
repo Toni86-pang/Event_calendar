@@ -12,7 +12,7 @@ server.use('/', express.static('./dist/client'))
 
 server.use(express.json())
 server.get('/api/version', (req: Request, res: Response) => {
-	res.send('Server version 0.3.2')
+	res.send('Server version 0.7')
 })
 
 server.use('/api/users' ,usersRouter)

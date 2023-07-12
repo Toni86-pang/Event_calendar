@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import argon2 from 'argon2'
-import { addUser, getUserByUsername, getUsers } from '../dao'
+import { addUser, getUserByUsername, getUsers, deleteUserById, deleteCommentByEventId, deleteEventsByUserId, getEventByUserId, deleteEventParticipants, deleteEventInvitations } from '../dao'
 import { authenticate } from '../middleware'
 
 interface CustomRequest extends Request {
@@ -34,7 +34,7 @@ usersRouter.post('/register', async (req: Request, res: Response) => {
 	const id = storedUser.user_id ?? ''
 	const token = jwt.sign({ username, id }, secret)
 	console.log('token: ', token)
-	res.status(200).json({ token, success: true })
+	res.status(200).json({id,  token, success: true })
 })
 
 // Login user
@@ -54,7 +54,7 @@ usersRouter.post('/login', async (req: Request, res: Response) => {
 	const id = existingUser.user_id
 
 	const token = jwt.sign({ username, id }, secret)
-	res.status(200).json(token)
+	res.status(200).json({id, token})
 
 })
 
@@ -63,5 +63,29 @@ usersRouter.get('/', async (req: CustomRequest, res: Response) => {
 	const user = await getUsers()
 	res.send(user)
 })
+
+// DELETE User by id
+usersRouter.delete('/delete', authenticate, async (req: CustomRequest, res: Response) => {
+	const userId = req.user_id
+	if(!userId) return res.status(400).send('no userid')
+	
+	const getEventIds = await getEventByUserId(userId.toString())
+	const eventIds = getEventIds.map(event => event.event_id)
+	
+	if(getEventIds.length < 1) return res.status(400).send('no events')
+	eventIds.forEach( id => deleteComment(id))
+
+	await deleteEventsByUserId(userId.toString())
+	await deleteUserById(userId.toString())
+
+	res.send('user deleted')
+})
+
+const deleteComment = async (id: number) => {
+	await deleteCommentByEventId(id)
+	await deleteEventParticipants(id)
+	await deleteEventInvitations(id)
+}
+
 
 export default usersRouter

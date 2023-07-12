@@ -44,6 +44,12 @@ export const getUsers = async () => {
 	return result.rows
 }
 
+export const deleteUserById = async (userId: string) => {
+	const params = [userId]
+	await executeQuery(query.deleteUserById, params)
+	return
+}
+
 
 // Events
 export const getEvents = async () => {
@@ -66,6 +72,12 @@ export const getEventById = async (id: string) => {
 export const deleteEventById = async (id: string) => {
 	const params = [id]
 	await executeQuery(query.deleteEventById, params)
+	return
+}
+
+export const deleteEventsByUserId = async (id: string) => {
+	const params = [id]
+	await executeQuery(query.deleteEventsByUserId, params)
 	return
 }
 
@@ -99,7 +111,7 @@ export const postComment = async (event_id: string, user_id: number | null | und
 	return
 }
 
-export const deleteCommentByEventId = async (event_id: string) => {
+export const deleteCommentByEventId = async (event_id: number) => {
 	const params = [event_id]
 	await executeQuery(query.deleteCommentsInEvent, params)
 	return
@@ -121,9 +133,20 @@ export const getInvitationsByUserId = async (userRecId: number) => {
 
 	return invitations.rows
 }
+export const deleteEventInvitations = async (eventId: number) => {
+	const params = [eventId]
+	await executeQuery(query.deleteEventInvitations, params)
+	return 
+}
+
 
 
 // participants
+export const deleteEventParticipants = async (eventId: number) => {
+	const params = [eventId]
+	await executeQuery(query.deleteEventParticipants, params)
+	return 
+}
 
 export const getParticipantsByEventId = async (eventId: number) => {
 	try {

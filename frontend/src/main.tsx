@@ -55,7 +55,7 @@ const routes = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<RouterProvider router={routes} />
-		<img className='construct' src='./img/pngwing.com.png' />
+		<img className='construct' src='./img/pngwing.com.png' />   {/* DIST ./img/pngwing.com.png - DEV ./src/img/pngwing.com.png */}
 	</React.StrictMode>,
 )
 

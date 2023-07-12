@@ -1,28 +1,28 @@
 /* eslint-disable indent */
-import { useLoaderData } from 'react-router-dom'
+import { useLocation, useLoaderData, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
 
 interface Event {
-  event_id?: string
-  title: string
-  content: string
-  isPrivate: boolean
-  date_time: string
-  user_id: number
-  attendanceCount?: {
+	event_id?: string
+	title: string
+	content: string
+	private: boolean
+	date_time: string
+	user_id: number
+	attendanceCount?: {
 	[key: string]: number;
-    yesCount: number
-    noCount: number
-    maybeCount: number
-  }
+		yesCount: number
+		noCount: number
+		maybeCount: number
+	}
 }
 
 interface Comment {
 	user_id: number
 	comment: string
 	commentdate: string
-	
+
 }
 
 interface User {
@@ -47,31 +47,30 @@ export default function Event() {
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
 	const [users, setUsers] = useState<Array<User> | null>(null)
-	const [attendance, setAttendance] = useState('');
-	const [submittedAttendance, setSubmittedAttendance] = useState(false);
-	const [selectedAttendance, setSelectedAttendance] = useState('');
 
 	useEffect(() => {
-	const getUsers = async() => {
-		try {
-			const response = await fetch('/api/users/')
-			const users = await response.json()
-			if (users.length > 0) {
-				setUsers(users)
-				console.log('users fetched', users)
-			} else {
-				setUsers(null)
-				console.log('No Comments', users)
+		const getUsers = async () => {
+			try {
+
+				const response = await fetch('/api/users/')
+
+				const users = await response.json()
+				if (users.length > 0) {
+					setUsers(users)
+					console.log('users fetched', users)
+				} else {
+					setUsers(null)
+					console.log('No Comments', users)
+				}
+			} catch (error) {
+				console.log('Error fetching comments:', error)
 			}
-		} catch (error) {
-			console.log('Error fetching comments:', error)
 		}
-	}
 
-	getUsers()
-}, [])
+		getUsers()
+	}, [])
 
-	useEffect(() => {
+useEffect(() => {
     const getEventInfo = async () => {
       try {
         const eventResponse = await fetch('/api/events/event/' + id)
@@ -112,12 +111,10 @@ export default function Event() {
 		} catch (error) {
 		  console.log('Error fetching participants:', error)
 		}
-	  }
-	  
-	  getEventInfo()
-	}, [id])
+		getEventInfo()
+	}, [id, userId])
 
-	const getComments = async() => {
+	const getComments = async () => {
 		try {
 			const response = await fetch('/api/comments/' + id)
 			const comments = await response.json()
@@ -143,20 +140,20 @@ export default function Event() {
 		return formattedDate + ' ' + formattedTime
 	}
 
-	
+
 	const renderComments = eventComments?.map(comment => {
 
-		const findUserName = users?.find( user => user.user_id === comment.user_id)
+		const findUserName = users?.find(user => user.user_id === comment.user_id)
 
 		const keyId = nanoid()
 		return (<li className='commentItem' key={keyId}>
-							<p>{comment.comment}</p>
-							<p>posted by: {findUserName?.username? <span className='commenterName'>{findUserName?.username} </span>
-								: <span className='commenterName'>Anon </span>}
-									{formatDateTime(comment.commentdate)}</p>
-						</li>
-						)
-	}) 
+			<p>{comment.comment}</p>
+			<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
+				: <span className='commenterName'>Anon </span>}
+				{formatDateTime(comment.commentdate)}</p>
+		</li>
+		)
+	})
 
 
 	const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -164,13 +161,13 @@ export default function Event() {
 	}
 	const handlePostComment = async () => {
 		console.log('posted!')
-		const body = JSON.stringify({eventId: id, comment: comment})
+		const body = JSON.stringify({ eventId: id, comment: comment })
 
 		const headers = new Headers()
 		if (localStorage.getItem('token')) {
 			headers.append('Content-type', 'application/json')
-			headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)				
-			}
+			headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)
+		}
 		else {
 			headers.append('Content-type', 'application/json')
 		}
@@ -182,7 +179,7 @@ export default function Event() {
 				body: body,
 				headers: headers
 			})
-		} catch(error) {
+		} catch (error) {
 			console.log('Error posting comment:', error)
 		}
 		setComment('')
@@ -191,45 +188,8 @@ export default function Event() {
 
 	}
 	
-	const handleAttendanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (!submittedAttendance) {
-		  setAttendance(event.target.value);
-		}
-	  };
-	
-	  const handleAttendance = async (attendance: string) => {
-		if (!submittedAttendance) {
-		  try {
-			const body = JSON.stringify({ attendance });
-			const headers = new Headers();
-			headers.append('Content-Type', 'application/json');
-	
-			await fetch(`/api/participants/event/${id}`, {
-			  method: 'POST',
-			  body,
-			  headers,
-			});
-	
-			setCurrentEvent((prevEvent) => ({
-			  ...prevEvent!,
-			  attendanceCount: {
-				...prevEvent!.attendanceCount!,
-				[attendance]: prevEvent!.attendanceCount![attendance] + 1,
-			  },
-			}));
-	
-			setSubmittedAttendance(true);
-			console.log('Attendance updated successfully');
-		  } catch (error) {
-			console.log('Error updating attendance:', error);
-		  }
-		}
-	  };
-
-
-	  
 	return (
-		
+
 		<div className='events'>
 			<h2>
         {currentEvent && currentEvent.title}
@@ -237,51 +197,15 @@ export default function Event() {
 			<p>{currentEvent && currentEvent.content}</p>
 			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
-      <div className='checkboxes'>
-        <h3>Attendance</h3>
-        <div className='attendanceOptions'>
-          <label>
-            <input
-              type='checkbox'
-              value='yes'
-              checked={attendance === 'yes'}
-              onChange={handleAttendanceChange}
-              disabled={attendance !== ''}
-            />
-            Yes
-          </label>
-          <label>
-            <input
-              type='checkbox'
-              value='no'
-              checked={attendance === 'no'}
-              onChange={handleAttendanceChange}
-              disabled={attendance !== ''}
-            />
-            No
-          </label>
-          <label>
-            <input
-              type='checkbox'
-              value='maybe'
-              checked={attendance === 'maybe'}
-              onChange={handleAttendanceChange}
-              disabled={attendance !== ''}
-            />
-            Maybe
-          </label>
-        </div>
-        <button onClick={() => handleAttendance(attendance)} disabled={attendance === ''}>Submit Attendance</button>
-    </div>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
-     		<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
-      		<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
+			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
+			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
-			<div className='commentInputWrap'>
-				<input className='commentInput' type='text' value={comment} onChange={handleComment} />
-				<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
-			</div>
+				<div className='commentInputWrap'>
+					<input className='commentInput' type='text' value={comment} onChange={handleComment} />
+					<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
+				</div>
 				{renderComments}
 			</ul>
 		</div>
