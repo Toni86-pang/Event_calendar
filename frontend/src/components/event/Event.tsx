@@ -7,7 +7,7 @@ interface Event {
 	event_id?: string
 	title: string
 	content: string
-	isPrivate: boolean
+	private: boolean
 	date_time: string
 	user_id: number
 	attendanceCount?: {
@@ -46,20 +46,20 @@ export default function Event() {
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
 	const [users, setUsers] = useState<Array<User> | null>(null)
-	let userId: number | null
+	const [userId] = useState<number | null>(useLocation().state.userId)
 
-	if (useLocation().state) {
-		userId = useLocation().state.userId
-	} else {
-		userId = null
-	}
+	useEffect(() => {
+		console.log('event userId:', userId)
+	}, [userId])
 
 	console.log(userId)
 
 	useEffect(() => {
 		const getUsers = async () => {
 			try {
+
 				const response = await fetch('/api/users/')
+
 				const users = await response.json()
 				if (users.length > 0) {
 					setUsers(users)
@@ -79,8 +79,18 @@ export default function Event() {
 	useEffect(() => {
 		const getEventInfo = async () => {
 			try {
-				const eventResponse = await fetch('/api/events/event/' + id)
-				const event = await eventResponse.json() as Event[]
+				let response: Response
+				if (userId) {
+					response = await fetch('/api/events/event/' + id, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem('token')}`
+						}
+					})
+				} else {
+					response = await fetch('/api/events/event/' + id)
+				}
+
+				const event = await response.json() as Event[]
 				if (event.length > 0) {
 					const updatedEvent = { ...event[0] }
 					setCurrentEvent(updatedEvent)
@@ -99,7 +109,7 @@ export default function Event() {
 			getComments()
 		}
 		getEventInfo()
-	}, [id])
+	}, [id, userId])
 
 	const getComments = async () => {
 		try {
@@ -184,12 +194,11 @@ export default function Event() {
 	return (
 
 		<div className='events'>
-			<h2>
-				{currentEvent && currentEvent.title}
-			</h2>
+			<h2>{currentEvent && currentEvent.title}</h2>
+			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
+
 			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId }}><button>Edit event</button></Link> : ''}
-			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
-			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
+			<p>{currentEvent && (currentEvent.private?'Private':'Public')} event</p>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
 			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
