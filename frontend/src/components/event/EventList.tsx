@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { useLocation, Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 import './Events.css'
 
@@ -17,6 +17,15 @@ export function loader({ params }: any) {
 }
 
 const EventList = () => {
+
+	let userId: number|null
+
+	try {
+		userId = useLocation().state.userId
+
+	} catch {
+		userId = null
+	}
 
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
@@ -63,13 +72,13 @@ const EventList = () => {
 		const formattedTime = `${hours}:${minutes}`
 		return formattedDate + ' ' + formattedTime
 	}
-
+	console.log('eventlist userId:', userId)
 	const eventNavigation = eventList.map((event, i) => {
 		const formattedDateTime = formatDateTime(event.date_time)
 
 		return (
 			<li key={'event' + event.event_id + i}>
-				<Link to={'event/' + event.event_id}>
+				<Link to={'event/' + event.event_id } state={{userId}}>
 					<p>
 						{event.title}: {formattedDateTime}
 					</p>

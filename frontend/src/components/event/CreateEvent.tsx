@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './Events.css'
 
 // interface Props {
@@ -19,8 +19,19 @@ import './Events.css'
 function CreateEvent() {
 	
 
-	const newEvent = true
-	const eventId = -1
+	let newEvent = true
+
+	let eventId: number|null
+
+	try {
+		eventId = useLocation().state.eventId
+
+	} catch {
+		eventId = null
+	}
+	if(eventId) newEvent = false
+	console.log('eventId', eventId)
+	console.log('newEvent:', newEvent)
 
 	const [title, setTitle] = useState('')
 	const [content, setContent] = useState('')
@@ -42,7 +53,10 @@ function CreateEvent() {
 				setTitle(event.title)
 				setContent(event.content)
 				setPrivate(event.private)
-                
+				const date = event.date_time.substring(0,10)
+				setDate(date)
+				const time = event.date_time.substring(11,16)
+				setTime(time)                
 			}
 			getEvent()
             
@@ -104,6 +118,7 @@ function CreateEvent() {
 				const response = await fetch('/api/events/' + eventId, {
 					method: 'PUT',
 					headers: {
+						'Authorization': `Bearer ${token}`,
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify(eventData)
@@ -121,6 +136,7 @@ function CreateEvent() {
 				console.error('Error modifying event:', error)
 			}
 		}
+
 
 
 		console.log('Title:' + title)
@@ -213,7 +229,7 @@ function CreateEvent() {
 						disabled={check()}>
 						{newEvent?'Create':'Modify'} event
 					</button>
-					<button onClick={() => navigate('/')} className='close'
+					<button onClick={() => navigate('/') } className='close'
 						type='reset'>
                         Cancel
 					</button>

@@ -1,10 +1,17 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { useOutletContext } from 'react-router-dom'
 
+interface OutletContext {
+	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+	setUserId: React.Dispatch<React.SetStateAction<number|null>>
+}
+
 function LoginForm() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-	const setLoggedIn: React.Dispatch<React.SetStateAction<boolean>> = useOutletContext()
+	const outletContext: OutletContext = useOutletContext()
+	const setLoggedIn = outletContext.setLoggedIn
+	const setUserId = outletContext.setUserId 
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault()
@@ -19,7 +26,10 @@ function LoginForm() {
 				}
 			})
 			console.log(response)
-			const token = await response.json()
+			const data = await response.json()
+			const token = data.token
+			const userId = data.id
+			setUserId(userId)
 			setLoggedIn(true)
 			console.log(token)
 

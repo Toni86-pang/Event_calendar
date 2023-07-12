@@ -7,7 +7,7 @@ const getAllUsers = 'SELECT user_id, username FROM users;'
 // Events
 const allEvents = 'SELECT event_id, title, private, date_time FROM events ORDER BY date_time;'
 const eventsByUserId = 'SELECT event_id, title, content, private, date_time FROM events WHERE user_id = $1;'
-const eventsById = 'SELECT user_id, title, content, private, date_time FROM events WHERE event_id = $1;'
+const eventsById = 'SELECT event_id, user_id, title, content, private, date_time FROM events WHERE event_id = $1;'
 const deleteEventById = 'DELETE FROM events WHERE event_id = $1;'
 const deleteCommentsInEvent = 'DELETE FROM comments WHERE event_id = $1'
 const addEvent = 'INSERT INTO events (user_id, title, content, private, date_time) VALUES ($1, $2, $3, $4, $5) RETURNING *;'
