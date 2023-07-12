@@ -1,23 +1,27 @@
 /* eslint-disable indent */
-import { useLoaderData } from 'react-router-dom'
+import { useLocation, useLoaderData, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
 
 interface Event {
-  event_id?: string
-  title: string
-  content: string
-  isPrivate: boolean
-  date_time: string
-  user_id: number
-  participantCount: number
+	event_id?: string
+	title: string
+	content: string
+	isPrivate: boolean
+	date_time: string
+	user_id: number
+	attendanceCount?: {
+		yesCount: number
+		noCount: number
+		maybeCount: number
+	}
 }
 
 interface Comment {
 	user_id: number
 	comment: string
 	commentdate: string
-	
+
 }
 
 interface User {
@@ -42,53 +46,62 @@ export default function Event() {
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
 	const [users, setUsers] = useState<Array<User> | null>(null)
+	let userId: number | null
 
-	useEffect(() => {
-	const getUsers = async() => {
-		try {
-			const response = await fetch('/api/users/')
-			const users = await response.json()
-			if (users.length > 0) {
-				setUsers(users)
-				console.log('users fetched', users)
-			} else {
-				setUsers(null)
-				console.log('No Comments', users)
-			}
-		} catch (error) {
-			console.log('Error fetching comments:', error)
-		}
+	if (useLocation().state) {
+		userId = useLocation().state.userId
+	} else {
+		userId = null
 	}
 
-	getUsers()
-}, [])
+	console.log(userId)
 
 	useEffect(() => {
-	  const getEventInfo = async () => {
-		try {
-		  const eventResponse = await fetch('/api/events/event/' + id)
-		  const event = await eventResponse.json() as Event[]
-		  if (event.length > 0) {
-			const updatedEvent = { ...event[0] }
-			setCurrentEvent(updatedEvent)
-			console.log('All works')
-  
-			const participantsResponse = await fetch('/api/participants/' + id)
-			const participants = await participantsResponse.json()
-			const participantCount = participants.length
-			setCurrentEvent(prevEvent => ({ ...prevEvent!, participantCount }))
-		  } else {
-			setCurrentEvent(null)
-		  }
-		} catch (error) {
-		  console.log('Error fetching event data:', error)
+		const getUsers = async () => {
+			try {
+				const response = await fetch('/api/users/')
+				const users = await response.json()
+				if (users.length > 0) {
+					setUsers(users)
+					console.log('users fetched', users)
+				} else {
+					setUsers(null)
+					console.log('No Comments', users)
+				}
+			} catch (error) {
+				console.log('Error fetching comments:', error)
+			}
 		}
-		getComments()
-	  }
-	  getEventInfo()
+
+		getUsers()
+	}, [])
+
+	useEffect(() => {
+		const getEventInfo = async () => {
+			try {
+				const eventResponse = await fetch('/api/events/event/' + id)
+				const event = await eventResponse.json() as Event[]
+				if (event.length > 0) {
+					const updatedEvent = { ...event[0] }
+					setCurrentEvent(updatedEvent)
+					console.log('All works')
+
+					const participantsResponse = await fetch('/api/participants/' + id)
+					const participants = await participantsResponse.json()
+					const participantCount = participants.length
+					setCurrentEvent(prevEvent => ({ ...prevEvent!, participantCount }))
+				} else {
+					setCurrentEvent(null)
+				}
+			} catch (error) {
+				console.log('Error fetching event data:', error)
+			}
+			getComments()
+		}
+		getEventInfo()
 	}, [id])
 
-	const getComments = async() => {
+	const getComments = async () => {
 		try {
 			const response = await fetch('/api/comments/' + id)
 			const comments = await response.json()
@@ -114,20 +127,20 @@ export default function Event() {
 		return formattedDate + ' ' + formattedTime
 	}
 
-	
+
 	const renderComments = eventComments?.map(comment => {
 
-		const findUserName = users?.find( user => user.user_id === comment.user_id)
+		const findUserName = users?.find(user => user.user_id === comment.user_id)
 
 		const keyId = nanoid()
 		return (<li className='commentItem' key={keyId}>
-							<p>{comment.comment}</p>
-							<p>posted by: {findUserName?.username? <span className='commenterName'>{findUserName?.username} </span>
-																						: <span className='commenterName'>Anon </span>}
-																						{formatDateTime(comment.commentdate)}</p>
-						</li>
-						)
-	}) 
+			<p>{comment.comment}</p>
+			<p>posted by: {findUserName?.username ? <span className='commenterName'>{findUserName?.username} </span>
+				: <span className='commenterName'>Anon </span>}
+				{formatDateTime(comment.commentdate)}</p>
+		</li>
+		)
+	})
 
 
 	const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,13 +148,13 @@ export default function Event() {
 	}
 	const handlePostComment = async () => {
 		console.log('posted!')
-		const body = JSON.stringify({eventId: id, comment: comment})
+		const body = JSON.stringify({ eventId: id, comment: comment })
 
 		const headers = new Headers()
 		if (localStorage.getItem('token')) {
 			headers.append('Content-type', 'application/json')
-			headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)				
-			}
+			headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)
+		}
 		else {
 			headers.append('Content-type', 'application/json')
 		}
@@ -153,7 +166,7 @@ export default function Event() {
 				body: body,
 				headers: headers
 			})
-		} catch(error) {
+		} catch (error) {
 			console.log('Error posting comment:', error)
 		}
 		setComment('')
@@ -161,23 +174,31 @@ export default function Event() {
 		getComments()
 
 	}
-	
+
+	const eventId = currentEvent?.event_id
+	console.log(currentEvent)
+	console.log('eventId: ', eventId)
+	console.log('event userId:', currentEvent?.user_id)
+	console.log('current userId: ', userId)
+
 	return (
-		
+
 		<div className='events'>
 			<h2>
-        {currentEvent && currentEvent.title}
+				{currentEvent && currentEvent.title}
 			</h2>
-			<p>{currentEvent && currentEvent.content}</p>
+			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId }}><button>Edit event</button></Link> : ''}
 			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
-			<p>Participant count: {currentEvent && currentEvent.participantCount}</p>
+			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
+			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
+			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
-			<div className='commentInputWrap'>
-				<input className='commentInput' type='text' value={comment} onChange={handleComment} />
-				<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
-			</div>
+				<div className='commentInputWrap'>
+					<input className='commentInput' type='text' value={comment} onChange={handleComment} />
+					<button className='commentBtn' onClick={handlePostComment}>Add Comment</button>
+				</div>
 				{renderComments}
 			</ul>
 		</div>

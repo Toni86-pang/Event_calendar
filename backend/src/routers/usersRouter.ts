@@ -34,7 +34,7 @@ usersRouter.post('/register', async (req: Request, res: Response) => {
 	const id = storedUser.user_id ?? ''
 	const token = jwt.sign({ username, id }, secret)
 	console.log('token: ', token)
-	res.status(200).json({ token, success: true })
+	res.status(200).json({id,  token, success: true })
 })
 
 // Login user
@@ -54,7 +54,7 @@ usersRouter.post('/login', async (req: Request, res: Response) => {
 	const id = existingUser.user_id
 
 	const token = jwt.sign({ username, id }, secret)
-	res.status(200).json(token)
+	res.status(200).json({id, token})
 
 })
 
