@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './CreateEvent.css'
+import './Events.css'
 
 // interface Props {
 //     newEvent: boolean
@@ -153,7 +153,7 @@ function CreateEvent() {
 					<input
 						type="text"
 						name="content"
-						maxLength={75}
+						maxLength={500}
 						id="content"
 						value={content}
 						placeholder="Add content..."
@@ -161,7 +161,7 @@ function CreateEvent() {
 						onChange={e => { setContent(e.target.value) }}
 					/>
 				</div>
-				<div className="form-group">
+				<div className="form-group-radio">
 					<label htmlFor="isPrivate">Private: </label>
 					<input
 						type="radio"
@@ -173,7 +173,7 @@ function CreateEvent() {
 						onChange={handlePrivate}
 					/>
 				</div>
-				<div className="form-group">
+				<div className="form-group-radio">
 					<label htmlFor="isPrivate">Public: </label>
 					<input
 						type="radio"
