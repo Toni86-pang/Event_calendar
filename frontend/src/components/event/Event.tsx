@@ -11,6 +11,7 @@ interface Event {
 	date_time: string
 	user_id: number
 	attendanceCount?: {
+	[key: string]: number;
 		yesCount: number
 		noCount: number
 		maybeCount: number
@@ -46,13 +47,6 @@ export default function Event() {
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
 	const [users, setUsers] = useState<Array<User> | null>(null)
-	const [userId] = useState<number | null>(useLocation().state.userId)
-
-	useEffect(() => {
-		console.log('event userId:', userId)
-	}, [userId])
-
-	console.log(userId)
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -76,37 +70,46 @@ export default function Event() {
 		getUsers()
 	}, [])
 
-	useEffect(() => {
-		const getEventInfo = async () => {
-			try {
-				let response: Response
-				if (userId) {
-					response = await fetch('/api/events/event/' + id, {
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem('token')}`
-						}
-					})
-				} else {
-					response = await fetch('/api/events/event/' + id)
-				}
+useEffect(() => {
+    const getEventInfo = async () => {
+      try {
+        const eventResponse = await fetch('/api/events/event/' + id)
+        const event = await eventResponse.json() as Event[]
+        if (event.length > 0) {
+          setCurrentEvent(event[0])
+          console.log('All works')
+        } else {
+          setCurrentEvent(null)
+        }
+      } catch (error) {
+        console.log('Error fetching event data:', error)
+      }
+      getParticipants()
+    }
 
-				const event = await response.json() as Event[]
-				if (event.length > 0) {
-					const updatedEvent = { ...event[0] }
-					setCurrentEvent(updatedEvent)
-					console.log('All works')
-
-					const participantsResponse = await fetch('/api/participants/' + id)
-					const participants = await participantsResponse.json()
-					const participantCount = participants.length
-					setCurrentEvent(prevEvent => ({ ...prevEvent!, participantCount }))
-				} else {
-					setCurrentEvent(null)
-				}
-			} catch (error) {
-				console.log('Error fetching event data:', error)
+	const getParticipants = async () => {
+		try {
+		  const participantsResponse = await fetch('/api/participants/' + id)
+		  const data = await participantsResponse.json()
+	  
+		  const participants = data.participants // Access the participants array
+	  
+		  console.log('Participants:', participants)
+	  
+		  const yesCount = participants.filter((participant: any) => participant.attendance === 'yes').length
+		  const noCount = participants.filter((participant: any) => participant.attendance === 'no').length
+		  const maybeCount = participants.filter((participant: any) => participant.attendance === 'maybe').length
+	  
+		  setCurrentEvent(prevEvent => ({
+			...prevEvent!,
+			attendanceCount: {
+			  yesCount,
+			  noCount,
+			  maybeCount
 			}
-			getComments()
+		  }))
+		} catch (error) {
+		  console.log('Error fetching participants:', error)
 		}
 		getEventInfo()
 	}, [id, userId])
@@ -185,13 +188,7 @@ export default function Event() {
 		getComments()
 
 	}
-
-	const eventId = currentEvent?.event_id
-	console.log(currentEvent)
-	console.log('eventId: ', eventId)
-	console.log('event userId:', currentEvent?.user_id)
-	console.log('current userId: ', userId)
-
+	
 	return (
 
 		<div className='events'>
@@ -216,5 +213,57 @@ export default function Event() {
 				</ul>
 		
 		</div>
+	
 	)
 }
+
+/*  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (!submittedAttendance) {
+		  setAttendance(event.target.value);
+		}
+	  };
+	  const handleUpdateAttendance = async () => {
+		try {
+		  const body = JSON.stringify({ attendance: selectedAttendance });
+		  const headers = new Headers();
+		  headers.append('Content-Type', 'application/json');
+	  
+		  if (attendance !== '') {
+			// If currentAttendance exists, make a PUT request to update the attendance
+			await fetch(`/api/participants/event/${id}`, {
+			  method: 'PUT',
+			  body,
+			  headers,
+			});
+	  
+			setCurrentEvent((prevEvent) => ({
+			  ...prevEvent!,
+			  attendanceCount: {
+				...prevEvent!.attendanceCount!,
+				[attendance]: prevEvent!.attendanceCount![attendance] - 1,
+				[selectedAttendance]: prevEvent!.attendanceCount![selectedAttendance] + 1,
+			  },
+			}));
+		  } else {
+			// If currentAttendance doesn't exist, make a POST request to create a new participant
+			await fetch(`/api/participants/event/${id}`, {
+			  method: 'POST',
+			  body,
+			  headers,
+			});
+	  
+			setCurrentEvent((prevEvent) => ({
+			  ...prevEvent!,
+			  attendanceCount: {
+				...prevEvent!.attendanceCount!,
+				[selectedAttendance]: prevEvent!.attendanceCount![selectedAttendance] + 1,
+			  },
+			}));
+		  }
+	  
+		  setSubmittedAttendance(true);
+		  console.log('Attendance updated successfully');
+		} catch (error) {
+		  console.log('Error updating attendance:', error);
+		}
+	  };*/

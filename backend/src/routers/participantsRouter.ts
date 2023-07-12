@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { getParticipantsByEventId, getEventById, createParticipant } from './../dao'
+import { getParticipantsByEventId, getEventById, createParticipant, updateParticipant } from './../dao'
 import { authenticate } from '../middleware'
 
 
@@ -19,35 +19,41 @@ const participantsRouter = express.Router()
 
 // Get participants by eventid
 participantsRouter.get('/:id', authenticate, async (req: CustomRequest, res: Response) => {
-  try {
-    const eventId = req.params.id
+	try {
+		const eventId = req.params.id
 
-    const event: Participants[] = await getEventById(eventId)
+		const event: Participants[] = await getEventById(eventId)
     
-    if (!event.length) {
-      return res.status(404).json({ error: 'Event not found' })
-    }
+		if (!event.length) {
+			return res.status(404).json({ error: 'Event not found' })
+		}
 
-    const participants = await getParticipantsByEventId(parseInt(eventId, 10))
-    const response = {
-      event: event[0],
-      participants: participants
-    }
+		const participants = await getParticipantsByEventId(parseInt(eventId, 10))
+		const response = {
+			event: event[0],
+			participants: participants
+		}
     
-    return res.status(200).json(response);
-  } catch (error) {
-    console.error('Error retrieving participants:', error)
-    return res.status(500).json({ error: 'Internal server error' })
-  }
+		return res.status(200).json(response)
+	} catch (error) {
+		console.error('Error retrieving participants:', error)
+		return res.status(500).json({ error: 'Internal server error' })
+	}
 })
 
 
-participantsRouter.post('/event/:id/attendance', async (req: CustomRequest, res: Response) => {
+participantsRouter.post('/event/:id', async (req: CustomRequest, res: Response) => {
 	const eventId = parseInt(req.params.id, 10)
 	const userId = req.body.userId
 	const attendance = req.body.attendance
-
+  
 	try {
+		// Validate input data
+		if (!eventId || !attendance) {
+			res.status(400).send('Invalid input data')
+			return
+		}
+  
 		const participant = await createParticipant(eventId, userId, attendance)
 		res.status(201).json(participant)
 	} catch (error) {
@@ -57,17 +63,24 @@ participantsRouter.post('/event/:id/attendance', async (req: CustomRequest, res:
 })
 
 
-// participantsRouter.put('/:id', async (req: CustomRequest, res: Response) => {
-// 	console.log(req.user_id)
-// 	const userId = Number(req.user_id)
-
-// 	const { title, content, isPrivate, date, time } = req.body
-// 	const eventId = Number(req.params.id)
-
-// 	const result = await modifyEvent(eventId, userId, title, content, isPrivate, date, time)
-// 	res.send(result)
-
-// })
+participantsRouter.put('/event/:id', async (req: CustomRequest, res: Response) => {
+	const eventId = parseInt(req.params.id, 10)
+	const userId = req.body.userId
+	const attendance = req.body.attendance
+	
+	try {
+		// Validate input data
+		if (!eventId || !attendance) {
+			res.status(400).send('Invalid input data')
+			return
+		}
+		const participant = await updateParticipant(eventId, userId, attendance)
+		res.status(200).json(participant)
+	} catch (error) {
+		console.error('Error updating participant:', error)
+		res.status(500).send('Internal Server Error')
+	}
+})
 
 
 

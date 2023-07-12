@@ -32,9 +32,9 @@ const deleteEventInvitations = 'DELETE FROM invitations WHERE event_id = $1;'
 
 //participants
 const participantsByEventId = ' SELECT participant_id, attendance FROM participants WHERE event_id = $1;'
-const postparticipation = 'INSERT INTO participants (event_id, user_id, attendance)VALUES ($1, $2, $3)RETURNING *;'
-const putparticipation = 'UPADTE participants SET attendace = $2 WHERE participant_id = $1 RETURNING *; '
 const deleteEventParticipants = 'DELETE FROM participants WHERE event_id = $1;'
+const postparticipation = 'INSERT INTO participants (event_id, user_id, attendance) VALUES ($1, $2, $3) RETURNING *;'
+const updateParticipant = 'UPDATE participants SET attendance = $2 WHERE participant_id = $1 RETURNING *;'
 
 export default {
 	addUser,
@@ -54,9 +54,5 @@ export default {
 	participantsByEventId,
 	getAllUsers,
 	postparticipation,
-	putparticipation,
-	deleteUserById,
-	deleteEventsByUserId,
-	deleteEventParticipants,
-	deleteEventInvitations
+	putparticipation
 }
