@@ -1,9 +1,11 @@
 import { useLocation, Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
+import { nanoid } from 'nanoid'
 import './Events.css'
 
 interface Event {
     event_id?: string
+		user_id?: number
     title: string
     content?: string
     isPrivate?: boolean
@@ -29,6 +31,7 @@ const EventList = () => {
 
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
+	const [allEvents, setAllEvents] = useState<Event[]>([])
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value)
@@ -41,7 +44,8 @@ const EventList = () => {
 				const response = await fetch('/api/events')
 				const events = await response.json() as Array<Event>
 				setEvents(events)
-
+				setAllEvents(events)
+				
 			} catch (error) {
 				console.log('Error fetching event data:', error)
 			}
@@ -87,15 +91,38 @@ const EventList = () => {
 		)
 	})
 
+	const filterMyEvents = allEvents.filter(event => event.user_id === userId)
+	console.log(userId, filterMyEvents)
+	const myEvents = filterMyEvents.map( event => {
+		const formattedDateTime = formatDateTime(event.date_time)
+		const keyId = nanoid()
+
+		return (
+			<li key={keyId}>
+				<Link to={'event/' + event.event_id } state={{userId}}>
+					<p>
+						{event.title}: {formattedDateTime}
+					</p>
+				</Link>
+			</li>
+		)
+	})
+
 	return (
 		<>
 			<h1>The Event Calendar</h1>
 			<div className='eventBrowser'>
 				<div className='leftColumn'>
-					<input onChange={handleChange} type='text'></input>
-					<ul className='eventList'>
-						{eventNavigation}
-					</ul>
+					<div className='eventsWrapper'>
+						<input onChange={handleChange} type='text'></input>
+						{myEvents.length>0?<ul className='myEvents'>
+							{myEvents} 
+						</ul> 
+							: <></>}
+						<ul className='eventList'>
+							{eventNavigation}
+						</ul>
+					</div>
 				</div>
 				<div className='eventInfo'>
 					<Outlet />
