@@ -142,3 +142,30 @@ export const getParticipantsByEventId = async (eventId: number) => {
 		throw error
 	}
 }
+
+export const createParticipant = async (eventId: number, userId: number, attendance: string) => {
+	try {
+	  const result = await executeQuery(
+		query.postparticipation,
+		[eventId, userId, attendance]
+	  );
+	  return result.rows[0];
+	} catch (error) {
+	  console.error('Error executing query:', error);
+	  throw error;
+	}
+  };
+
+
+  export const putParticipant = async (eventId: number, userId: number, attendance: string) => {
+	try {
+	  const result = await executeQuery(
+		query.,
+		[eventId, userId, attendance]
+	  );
+	  return result.rows[0];
+	} catch (error) {
+	  console.error('Error executing query:', error);
+	  throw error;
+	}
+  };

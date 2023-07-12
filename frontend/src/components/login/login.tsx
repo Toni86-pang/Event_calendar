@@ -1,9 +1,10 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
+import { useOutletContext } from 'react-router-dom'
 
 function LoginForm() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
-
+	const setLoggedIn: React.Dispatch<React.SetStateAction<boolean>> = useOutletContext()
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault()
@@ -19,6 +20,7 @@ function LoginForm() {
 			})
 			console.log(response)
 			const token = await response.json()
+			setLoggedIn(true)
 			console.log(token)
 
 			localStorage.setItem('token', token)
