@@ -22,7 +22,6 @@ export default function Nav() {
 									: <Link className='link' to='/login'><button>Login</button></Link>
 				}
 			</nav>
-			<img className='construct' src='./src/img/pngwing.com.png' />
 			<Outlet context={setLoggedIn}/>
 		</div>
 	)
