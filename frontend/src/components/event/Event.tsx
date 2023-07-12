@@ -10,7 +10,11 @@ interface Event {
   isPrivate: boolean
   date_time: string
   user_id: number
-  participantCount: number
+  attendanceCount?: {
+    yesCount: number
+    noCount: number
+    maybeCount: number
+  }
 }
 
 interface Comment {
@@ -63,28 +67,49 @@ export default function Event() {
 	getUsers()
 }, [])
 
-	useEffect(() => {
-	  const getEventInfo = async () => {
+useEffect(() => {
+    const getEventInfo = async () => {
+      try {
+        const eventResponse = await fetch('/api/events/event/' + id)
+        const event = await eventResponse.json() as Event[]
+        if (event.length > 0) {
+          setCurrentEvent(event[0])
+          console.log('All works')
+        } else {
+          setCurrentEvent(null)
+        }
+      } catch (error) {
+        console.log('Error fetching event data:', error)
+      }
+      getParticipants()
+    }
+
+	const getParticipants = async () => {
 		try {
-		  const eventResponse = await fetch('/api/events/event/' + id)
-		  const event = await eventResponse.json() as Event[]
-		  if (event.length > 0) {
-			const updatedEvent = { ...event[0] }
-			setCurrentEvent(updatedEvent)
-			console.log('All works')
-  
-			const participantsResponse = await fetch('/api/participants/' + id)
-			const participants = await participantsResponse.json()
-			const participantCount = participants.length
-			setCurrentEvent(prevEvent => ({ ...prevEvent!, participantCount }))
-		  } else {
-			setCurrentEvent(null)
-		  }
+		  const participantsResponse = await fetch('/api/participants/' + id)
+		  const data = await participantsResponse.json()
+	  
+		  const participants = data.participants // Access the participants array
+	  
+		  console.log('Participants:', participants)
+	  
+		  const yesCount = participants.filter((participant: any) => participant.attendance === 'yes').length
+		  const noCount = participants.filter((participant: any) => participant.attendance === 'no').length
+		  const maybeCount = participants.filter((participant: any) => participant.attendance === 'maybe').length
+	  
+		  setCurrentEvent(prevEvent => ({
+			...prevEvent!,
+			attendanceCount: {
+			  yesCount,
+			  noCount,
+			  maybeCount
+			}
+		  }))
 		} catch (error) {
-		  console.log('Error fetching event data:', error)
+		  console.log('Error fetching participants:', error)
 		}
-		getComments()
 	  }
+	  
 	  getEventInfo()
 	}, [id])
 
@@ -123,8 +148,8 @@ export default function Event() {
 		return (<li className='commentItem' key={keyId}>
 							<p>{comment.comment}</p>
 							<p>posted by: {findUserName?.username? <span className='commenterName'>{findUserName?.username} </span>
-																						: <span className='commenterName'>Anon </span>}
-																						{formatDateTime(comment.commentdate)}</p>
+								: <span className='commenterName'>Anon </span>}
+									{formatDateTime(comment.commentdate)}</p>
 						</li>
 						)
 	}) 
@@ -171,7 +196,9 @@ export default function Event() {
 			<p>{currentEvent && currentEvent.content}</p>
 			<p>{currentEvent && (currentEvent.isPrivate ? 'Private' : 'Public')} event</p>
 			<p>Date and time: {currentEvent && formatDateTime(currentEvent.date_time)}</p>
-			<p>Participant count: {currentEvent && currentEvent.participantCount}</p>
+			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
+     		<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
+      		<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
 			<h3>Comment Section</h3>
 			<ul className='commentWrapper'>
 			<div className='commentInputWrap'>
