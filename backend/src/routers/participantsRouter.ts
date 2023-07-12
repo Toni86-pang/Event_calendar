@@ -65,4 +65,5 @@ participantsRouter.post('/event/:id/attendance', async (req: CustomRequest, res:
 // })
 
 
+
 export default participantsRouter
