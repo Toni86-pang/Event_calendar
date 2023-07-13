@@ -17,10 +17,6 @@ export default function Nav() {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-	if(!loggedIn) localStorage.clear()
-  },[loggedIn])
-
   const handleDelete = async () => {
     
     try {

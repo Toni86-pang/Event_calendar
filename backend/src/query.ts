@@ -27,7 +27,8 @@ const getInvitationsByUserId = `
 	SELECT DISTINCT events.*
 	FROM events
 	LEFT JOIN invitations ON invitations.event_id = events.event_id
-	WHERE events.private = false OR invitations.user_rec_id = $1;`
+	WHERE events.private = false OR invitations.user_rec_id = $1
+	ORDER BY date_time;`
 const deleteEventInvitations = 'DELETE FROM invitations WHERE event_id = $1;'
 
 //participants
