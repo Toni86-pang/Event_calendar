@@ -32,18 +32,23 @@ const EventList = () => {
 
 	useEffect(() => {
 		const getEvents = async () => {
+
+			const headers = new Headers()
+			if (localStorage.getItem('token')) {
+				headers.append('Content-type', 'application/json')
+				headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)
+			}
+			else {
+				headers.append('Content-type', 'application/json')
+			}
+
 			try {
-				let response: Response
-				if (userId) {
-					console.log('eventlist userId: ', userId)
-					response = await fetch('/api/events', {
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem('token')}`
-						}
-					})
-				} else {
-					response = await fetch('/api/events')
-				}
+				
+				console.log('eventlist userId: ', userId)
+				const response = await fetch('/api/events', {
+					headers: headers
+				})
+				
 
 				const events = await response.json() as Array<Event>
 				setEvents(events)

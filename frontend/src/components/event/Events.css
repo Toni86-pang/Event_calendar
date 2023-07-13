@@ -166,3 +166,34 @@ p:nth-child(1) {
 	scrollbar-width: none; /* for Firefox */
 	overflow-y: scroll; 
 }
+
+/* details field*/
+.eventDetailWrap {
+  background-color: var(--wrap);
+	border: 2px solid var(--text);
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.contentWrap {
+  background-color: var(--nav);
+  border: 2px solid var(--text);
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.contentText {
+  background-color: var(--item);
+  border-radius: 5px;
+  border: 2px solid var(--text);
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+
+
+
+
+
+
+
+
