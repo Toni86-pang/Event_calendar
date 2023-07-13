@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import { useLoaderData, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import Comments from '../comments/Comments'
+import Comments from '../commentsi/Comments'
 
 interface Event {
 	event_id?: string
