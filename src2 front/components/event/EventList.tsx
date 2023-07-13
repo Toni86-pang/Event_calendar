@@ -1,11 +1,9 @@
-import { Link, Outlet } from 'react-router-dom'
+import { useLocation, Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
-import { nanoid } from 'nanoid'
 import './Events.css'
 
 interface Event {
 	event_id?: string
-	user_id?: number
 	title: string
 	content?: string
 	private?: boolean
@@ -20,11 +18,17 @@ export function loader({ params }: any) {
 
 const EventList = () => {
 
+	let userId: number | null
+
+	try {
+		userId = useLocation().state.userId
+
+	} catch {
+		userId = null
+	}
 
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
-	const [allEvents, setAllEvents] = useState<Event[]>([])
-	const [userId] = useState<number | undefined>(Number(localStorage.getItem('userId')))
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value)
@@ -32,27 +36,21 @@ const EventList = () => {
 
 	useEffect(() => {
 		const getEvents = async () => {
-
-			const headers = new Headers()
-			if (localStorage.getItem('token')) {
-				headers.append('Content-type', 'application/json')
-				headers.append('Authorization', `Bearer ${localStorage.getItem('token')}`)
-			}
-			else {
-				headers.append('Content-type', 'application/json')
-			}
-
 			try {
-				
-				console.log('eventlist userId: ', userId)
-				const response = await fetch('/api/events', {
-					headers: headers
-				})
-				
+				let response: Response
+				if (userId) {
+					console.log('eventlist userId: ', userId)
+					response = await fetch('/api/events', {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem('token')}`
+						}
+					})
+				} else {
+					response = await fetch('/api/events')
+				}
 
 				const events = await response.json() as Array<Event>
 				setEvents(events)
-				setAllEvents(events)
 
 			} catch (error) {
 				console.log('Error fetching event data:', error)
@@ -66,6 +64,7 @@ const EventList = () => {
 	let eventList
 
 	if (search.length > 0) {
+
 
 		const filteredEvents = events.filter((event) =>
 			event.title.toLowerCase().includes(search.toLowerCase())
@@ -83,38 +82,15 @@ const EventList = () => {
 		const formattedTime = `${hours}:${minutes}`
 		return formattedDate + ' ' + formattedTime
 	}
-
 	console.log('eventlist userId:', userId)
 	const eventNavigation = eventList.map((event, i) => {
 		const formattedDateTime = formatDateTime(event.date_time)
 
 		return (
 			<li key={'event' + event.event_id + i}>
-				<Link className='eventLink' to={'event/' + event.event_id} state={{ userId }}>
-					<p className='linkDate'>
-						{formattedDateTime}
-					</p>
-					<p className='linkTitle'>
-						{event.title}
-					</p>
-				</Link>
-			</li>
-		)
-	})
-
-	const filterMyEvents = allEvents.filter(event => event.user_id === userId)
-	const myEvents = filterMyEvents.map(event => {
-		const formattedDateTime = formatDateTime(event.date_time)
-		const keyId = nanoid()
-
-		return (
-			<li key={keyId}>
-				<Link className='eventLink' to={'event/' + event.event_id} state={{ userId }}>
-					<p className='linkDate'>
-						{formattedDateTime}
-					</p>
-					<p className='linkTitle'>
-						{event.title}
+				<Link to={'event/' + event.event_id} state={{ userId }}>
+					<p>
+						{event.title}: {formattedDateTime}
 					</p>
 				</Link>
 			</li>
@@ -126,20 +102,10 @@ const EventList = () => {
 			<h1>The Event Calendar</h1>
 			<div className='eventBrowser'>
 				<div className='leftColumn'>
-					<div className='eventsWrapper'>
-						<input onChange={handleChange} type='text' placeholder='Type to search...'></input>
-						{myEvents.length > 0 ? <>
-							<h3>My events</h3>
-							<ul className='myEvents'>
-								{myEvents}
-							</ul>
-						</>
-							: <></>}
-						<h3>Upcoming events</h3>
-						<ul className='eventList'>
-							{eventNavigation}
-						</ul>
-					</div>
+					<input onChange={handleChange} type='text'></input>
+					<ul className='eventList'>
+						{eventNavigation}
+					</ul>
 				</div>
 				<div className='eventInfo'>
 					<Outlet />
