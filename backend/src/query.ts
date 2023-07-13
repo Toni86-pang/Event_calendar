@@ -54,5 +54,9 @@ export default {
 	participantsByEventId,
 	getAllUsers,
 	postparticipation,
-	putparticipation
+	updateParticipant,
+	deleteEventInvitations,
+	deleteEventParticipants,
+	deleteEventsByUserId,
+	deleteUserById
 }

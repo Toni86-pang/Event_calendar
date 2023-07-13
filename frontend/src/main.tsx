@@ -32,7 +32,7 @@ const routes = createBrowserRouter([
 			},
 			{
 				path: '/register',
-				element: <RegistrationForm onRegister={handleRegistrationFormSubmit} />,
+				element: <RegistrationForm />,
 				errorElement: <ErrorPage />,
 			},
 			{
@@ -57,11 +57,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 		<RouterProvider router={routes} />
 	</React.StrictMode>,
 )
-
-function handleRegistrationFormSubmit(username: string, password: string) {
-	// Handle registration form submission logic here
-	console.log('Submitted registration form with username:', username)
-	console.log('Submitted registration form with password:', password)
-}
 
 

@@ -1,12 +1,11 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-interface RegistrationFormProps {
-  onRegister: (username: string, password: string) => void;
-}
 
-function RegistrationForm({ onRegister }: RegistrationFormProps) {
+function RegistrationForm() {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
+	const navigate = useNavigate()
 
 	function handleSubmit(event: FormEvent) {
 		event.preventDefault()
@@ -24,7 +23,8 @@ function RegistrationForm({ onRegister }: RegistrationFormProps) {
 				// Handle the response from the server
 				// For example, you can check if the registration was successful
 				if (data.success) {
-					onRegister(username, password) // Call the onRegister callback
+					// onRegister(username, password) // Call the onRegister callback
+					navigate('/login')
 				} else {
 					// Handle the registration error
 					console.error('Registration failed:', data.error)
@@ -50,6 +50,7 @@ function RegistrationForm({ onRegister }: RegistrationFormProps) {
 	return (
 		<form onSubmit={handleSubmit}>
 			<div>
+				<h2>Register</h2>
 				<label htmlFor="username-input">Username:</label>
 				<input
 					id="username-input"

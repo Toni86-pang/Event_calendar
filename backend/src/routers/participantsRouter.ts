@@ -18,7 +18,7 @@ interface Participants {
 const participantsRouter = express.Router()
 
 // Get participants by eventid
-participantsRouter.get('/:id', authenticate, async (req: CustomRequest, res: Response) => {
+participantsRouter.get('/:id', async (req: CustomRequest, res: Response) => {
 	try {
 		const eventId = req.params.id
 

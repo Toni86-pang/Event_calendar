@@ -19,7 +19,7 @@ server.use('/api/users' ,usersRouter)
 server.use('/api/events', authenticate, eventsRouter)
 server.use('/api/comments', authenticate, commentsRouter)
 server.use('/api/invitations', authenticate, invitationsRouter)
-server.use('/api/participants', authenticate, participantsRouter)
+server.use('/api/participants', participantsRouter)
 server.use(unknownEndpoint)
 
 export default server

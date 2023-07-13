@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { useLocation, useLoaderData, Link } from 'react-router-dom'
+import { useLoaderData, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
 
@@ -11,7 +11,7 @@ interface Event {
 	date_time: string
 	user_id: number
 	attendanceCount?: {
-		[key: string]: number;
+		[key: string]: number
 		yesCount: number
 		noCount: number
 		maybeCount: number
@@ -47,6 +47,7 @@ export default function Event() {
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
 	const [users, setUsers] = useState<Array<User> | null>(null)
+	const [userId, setUserId] = useState<number|undefined>()
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -117,6 +118,7 @@ export default function Event() {
 			
 		}
 		getEventInfo()
+		setUserId(Number(localStorage.getItem('userId')))
 	}, [id])
 
 	const getComments = async () => {
@@ -200,7 +202,7 @@ export default function Event() {
 			<h2>{currentEvent && currentEvent.title}</h2>
 			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
 			<p>{currentEvent?.content}</p>
-			{/* {currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId }}><button>Edit event</button></Link> : ''} */}
+			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId:currentEvent?.event_id }}><button>Edit event</button></Link> : ''}
 			<p>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>

@@ -1,4 +1,4 @@
-import { useLocation, Link, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 import { nanoid } from 'nanoid'
 import './Events.css'
@@ -20,18 +20,11 @@ export function loader({ params }: any) {
 
 const EventList = () => {
 
-	let userId: number | null
-
-	try {
-		userId = useLocation().state.userId
-
-	} catch {
-		userId = null
-	}
 
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
 	const [allEvents, setAllEvents] = useState<Event[]>([])
+	const [userId] = useState<number|undefined>(Number(localStorage.getItem('userId')))
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value)
@@ -69,7 +62,6 @@ const EventList = () => {
 
 	if (search.length > 0) {
 
-
 		const filteredEvents = events.filter((event) =>
 			event.title.toLowerCase().includes(search.toLowerCase())
 		)
@@ -86,6 +78,7 @@ const EventList = () => {
 		const formattedTime = `${hours}:${minutes}`
 		return formattedDate + ' ' + formattedTime
 	}
+
 	console.log('eventlist userId:', userId)
 	const eventNavigation = eventList.map((event, i) => {
 		const formattedDateTime = formatDateTime(event.date_time)

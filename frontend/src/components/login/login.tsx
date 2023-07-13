@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext, useNavigate } from 'react-router-dom'
 
 interface OutletContext {
 	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
@@ -12,6 +12,7 @@ function LoginForm() {
 	const outletContext: OutletContext = useOutletContext()
 	const setLoggedIn = outletContext.setLoggedIn
 	const setUserId = outletContext.setUserId 
+	const navigate = useNavigate()
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault()
@@ -34,6 +35,8 @@ function LoginForm() {
 			console.log(token)
 
 			localStorage.setItem('token', token)
+			localStorage.setItem('userId', userId)
+			navigate('/events') 
 
 		} catch (error) {
 			console.log('Error login in:', error)
@@ -55,6 +58,7 @@ function LoginForm() {
 	return (
 		<form onSubmit={handleSubmit}>
 			<div>
+				<h2>Login</h2>
 				<label htmlFor="username-input">Username:</label>
 				<input
 					id="username-input"
