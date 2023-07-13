@@ -182,7 +182,11 @@ export default function Event() {
             Maybe
           </label>
         </div>
-        <button onClick={() => handleAttendance(attendance)} disabled={attendance === ''}>Submit Attendance</button>
+		<button onClick={() => handleAttendance(attendance)} 
+		disabled={attendance === '' || submittedAttendance}>
+  {submittedAttendance ? 'Attendance Submitted' : 'Submit Attendance'}
+</button>
+
 		</div>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
