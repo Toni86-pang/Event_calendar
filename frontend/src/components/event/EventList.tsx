@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useOutletContext } from 'react-router-dom'
 import { useState, ChangeEvent, useEffect } from 'react'
 import { nanoid } from 'nanoid'
 import './Events.css'
@@ -12,6 +12,11 @@ interface Event {
 	date_time: string
 }
 
+interface OutletContext {
+	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+	setUserId: React.Dispatch<React.SetStateAction<number | null>>
+	loggedIn: boolean
+}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function loader({ params }: any) {
 
@@ -20,6 +25,8 @@ export function loader({ params }: any) {
 
 const EventList = () => {
 
+	const outletContext: OutletContext = useOutletContext()
+	const loggedIn = outletContext.loggedIn
 
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
@@ -43,12 +50,12 @@ const EventList = () => {
 			}
 
 			try {
-				
+
 				console.log('eventlist userId: ', userId)
 				const response = await fetch('/api/events', {
 					headers: headers
 				})
-				
+
 
 				const events = await response.json() as Array<Event>
 				setEvents(events)
@@ -61,7 +68,7 @@ const EventList = () => {
 
 		getEvents()
 
-	}, [])
+	}, [loggedIn])
 
 	let eventList
 
