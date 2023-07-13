@@ -10,7 +10,9 @@ A project-based web application for browsing, creating, editing and commenting o
 
 - Package Manager: npm
 
-- Database: PostgreSQL.
+- Database: PostgreSQL
+
+- Cloud service: Azure
 
 
 # Functionality for a non-logged-in user:
@@ -86,3 +88,7 @@ A project-based web application for browsing, creating, editing and commenting o
         - User-created events
         - Comments related to user-created events
         - Participation announcements.
+
+# Link to the website
+
+    - https://blue-project2.azurewebsites.net/
