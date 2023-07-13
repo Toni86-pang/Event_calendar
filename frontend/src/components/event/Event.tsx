@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
 import { useLoaderData, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -27,8 +28,11 @@ export function loader({ params }: any) {
 export default function Event() {
 	const id = useLoaderData() as string
 	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
-	const [userId, setUserId] = useState<number | undefined>(Number(localStorage.getItem('userId')))
 	const navigate = useNavigate()
+
+	const [userId, setUserId] = useState<number | undefined>(Number(localStorage.getItem('userId')))
+	const [attendance, setAttendance] = useState('')
+	const [submittedAttendance, setSubmittedAttendance] = useState(false)
 
 	useEffect(() => {
 		const getEventInfo = async () => {
@@ -55,6 +59,8 @@ export default function Event() {
 			}
 			getParticipants()
 		}
+
+
 
 		const getParticipants = async () => {
 			try {
@@ -88,6 +94,42 @@ export default function Event() {
 		getEventInfo()
 		setUserId(Number(localStorage.getItem('userId')))
 	}, [id])
+
+
+	const handleAttendanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		if (!submittedAttendance) {
+			setAttendance(event.target.value)
+		}
+	}
+
+	const handleAttendance = async (attendance: string) => {
+		if (!submittedAttendance) {
+			try {
+				const body = JSON.stringify({ attendance })
+				const headers = new Headers()
+				headers.append('Content-Type', 'application/json')
+
+				await fetch(`/api/participants/event/${id}`, {
+					method: 'POST',
+					body,
+					headers,
+				})
+
+				setCurrentEvent((prevEvent) => ({
+					...prevEvent!,
+					attendanceCount: {
+						...prevEvent!.attendanceCount!,
+						[attendance]: prevEvent!.attendanceCount![attendance] + 1,
+					},
+				}))
+
+				setSubmittedAttendance(true)
+				console.log('Attendance updated successfully')
+			} catch (error) {
+				console.log('Error updating attendance:', error)
+			}
+		}
+	}
 
 	const formatDateTime = (dateTime: string): string => {
 		const date = new Date(dateTime)
@@ -129,71 +171,67 @@ export default function Event() {
 	}
 
 	return (
+		<div>
+			<div className='eventDetailWrap'>
+				<div className='contentWrap'>
 
-		<div className='events'>
-			<h2>{currentEvent && currentEvent.title}</h2>
-			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
-			<p>{currentEvent?.content}</p>
-			{isEventOwner() && <Link to={'/events/create'} state={{ eventId: currentEvent?.event_id }}><button>Edit event</button></Link>}
-			{isEventOwner() && deleteButton()}
-			<p>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
+					<h2>{currentEvent && currentEvent.title}</h2>
+					<p>{currentEvent && formatDateTime(currentEvent.date_time)} {currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
+					<div className='contentText'>
+						<p>{currentEvent?.content}</p>
+					</div>
+					{isEventOwner() && <Link to={'/events/create'} state={{ eventId: currentEvent?.event_id }}><button>Edit event</button></Link>}
+					{isEventOwner() && deleteButton()}
+				</div>
+				<p></p>
+
+				<div className='checkboxes'>
+					<h3>Attendance</h3>
+					<div className='attendanceOptions'>
+						<label>
+							<input
+								type='checkbox'
+								value='yes'
+								checked={attendance === 'yes'}
+								onChange={handleAttendanceChange}
+								disabled={attendance !== ''}
+							/>
+							Yes
+						</label>
+						<label>
+							<input
+								type='checkbox'
+								value='no'
+								checked={attendance === 'no'}
+								onChange={handleAttendanceChange}
+								disabled={attendance !== ''}
+							/>
+							No
+						</label>
+						<label>
+							<input
+								type='checkbox'
+								value='maybe'
+								checked={attendance === 'maybe'}
+								onChange={handleAttendanceChange}
+								disabled={attendance !== ''}
+							/>
+							Maybe
+						</label>
+					</div>
+					<button onClick={() => handleAttendance(attendance)}
+						disabled={attendance === '' || submittedAttendance}>
+						{submittedAttendance ? 'Attendance Submitted' : 'Submit Attendance'}
+					</button>
+
+				</div>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
 			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
+
+			</div>
 			<Comments />
 
 		</div>
-
 	)
 }
-
-/*  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (!submittedAttendance) {
-		  setAttendance(event.target.value);
-		}
-	  };
-	  const handleUpdateAttendance = async () => {
-		try {
-		  const body = JSON.stringify({ attendance: selectedAttendance });
-		  const headers = new Headers();
-		  headers.append('Content-Type', 'application/json');
-	  
-		  if (attendance !== '') {
-			// If currentAttendance exists, make a PUT request to update the attendance
-			await fetch(`/api/participants/event/${id}`, {
-			  method: 'PUT',
-			  body,
-			  headers,
-			});
-	  
-			setCurrentEvent((prevEvent) => ({
-			  ...prevEvent!,
-			  attendanceCount: {
-				...prevEvent!.attendanceCount!,
-				[attendance]: prevEvent!.attendanceCount![attendance] - 1,
-				[selectedAttendance]: prevEvent!.attendanceCount![selectedAttendance] + 1,
-			  },
-			}));
-		  } else {
-			// If currentAttendance doesn't exist, make a POST request to create a new participant
-			await fetch(`/api/participants/event/${id}`, {
-			  method: 'POST',
-			  body,
-			  headers,
-			});
-	  
-			setCurrentEvent((prevEvent) => ({
-			  ...prevEvent!,
-			  attendanceCount: {
-				...prevEvent!.attendanceCount!,
-				[selectedAttendance]: prevEvent!.attendanceCount![selectedAttendance] + 1,
-			  },
-			}));
-		  }
-	  
-		  setSubmittedAttendance(true);
-		  console.log('Attendance updated successfully');
-		} catch (error) {
-		  console.log('Error updating attendance:', error);
-		}
-	  };*/

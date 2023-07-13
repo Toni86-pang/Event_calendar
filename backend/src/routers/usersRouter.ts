@@ -72,9 +72,12 @@ usersRouter.delete('/delete', authenticate, async (req: CustomRequest, res: Resp
 	const getEventIds = await getEventByUserId(userId.toString())
 	const eventIds = getEventIds.map(event => event.event_id)
 	
-	if(getEventIds.length < 1) return res.status(400).send('no events')
-	eventIds.forEach( id => deleteComment(id))
+	const deleteLoop = async () => {
+		if(getEventIds.length < 1) return res.status(400).send('no events')
+		eventIds.forEach( id => deleteComment(id))
+	}
 
+	await deleteLoop()
 	await deleteEventsByUserId(userId.toString())
 	await deleteUserById(userId.toString())
 
@@ -82,8 +85,8 @@ usersRouter.delete('/delete', authenticate, async (req: CustomRequest, res: Resp
 })
 
 const deleteComment = async (id: number) => {
-	await deleteCommentByEventId(id)
 	await deleteEventParticipants(id)
+	await deleteCommentByEventId(id)
 	await deleteEventInvitations(id)
 }
 
