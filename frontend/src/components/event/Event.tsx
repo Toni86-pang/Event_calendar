@@ -177,8 +177,8 @@ export default function Event() {
 
 					<h2>{currentEvent && currentEvent.title}</h2>
 					<p>{currentEvent && formatDateTime(currentEvent.date_time)} {currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
-					<div className='contentText'>
-						<p>{currentEvent?.content}</p>
+					<div className='contentText' >
+						<p style={{color: '#3b6371f1'}}>{currentEvent?.content}</p>
 					</div>
 					{isEventOwner() && <Link to={'/events/create'} state={{ eventId: currentEvent?.event_id }}><button>Edit event</button></Link>}
 					{isEventOwner() && deleteButton()}
