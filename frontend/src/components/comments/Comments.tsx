@@ -2,6 +2,7 @@
 import { useLoaderData } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { nanoid } from 'nanoid'
+import './comments.css'
 
 interface Comment {
 	user_id: number

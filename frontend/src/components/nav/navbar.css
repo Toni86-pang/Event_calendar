@@ -12,14 +12,17 @@ html {
 	padding: 0;
 	height: 100vh;
 	background-color: var(--background);
+	border-top: 1px, #01161E ;
 }
-
 nav {
 	margin: 0;
 	background-color: var(--nav);
 	margin-bottom: 1rem;
-}
-
+	border-top: 1px solid #01161E;
+	box-sizing: border-box;
+	padding: 1rem;
+  }
+  
 .navLink {
 	margin-left: 2rem;
 }

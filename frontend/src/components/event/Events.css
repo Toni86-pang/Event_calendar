@@ -115,22 +115,66 @@ li {
 	top: 40vh
 }
 
+.checkboxes {
+	margin-top: 20px;
+  }
+  
+  .attendanceOptions {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+  }
+  
+  .attendanceOptions label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+  }
+  
+  .attendanceOptions input[type='checkbox'] {
+	margin-right: 5px;
+  }
+  
+  button {
+	padding: 6px 10px;
+	background-color: #AEC3B0;
+	color: #3b6371f1;
+	border: 1px solid #01161E;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  button:hover {
+	background-color: #8FA899;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
 
-
+  button:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;
+  }
+  
 /* COMMENT BOX */
 
 .commentInputWrap {
 	margin-bottom: 15px;
 }
 
-.commentInput {
-
-}
-
-.commentBtn {
-
-}
-
+.eventDetailWrap label {
+	color: var(--background); 
+  }
+  
+  .eventDetailWrap p:nth-last-child(-n+3) {
+	padding:3px 0px 0px 2px;
+	color: var(--background); 
+  }
+  
+  .eventDetailWrap h3 {
+	color: var(--background); 
+  }
+  
 .commentWrapper {
 	border: 2px solid var(--text);
 	border-radius: 15px;
@@ -189,11 +233,3 @@ p:nth-child(1) {
   padding: 0.5rem;
   margin: 0.5rem;
 }
-
-
-
-
-
-
-
-
