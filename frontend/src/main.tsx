@@ -3,6 +3,7 @@ import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import EventList, { loader as eventsLoader } from './components/event/EventList'
 import Event, { loader as eventLoader } from './components/event/Event'
+import Comments, {loader as commentLoader } from './components/Comments/Comments'
 import ErrorPage from './ErrorPage'
 import Nav from './components/nav/navbar'
 import './main.css'
@@ -27,6 +28,14 @@ const routes = createBrowserRouter([
 						element: <Event />,
 						loader: eventLoader,
 						errorElement: <ErrorPage />,
+						children: [
+							{
+								path: '/events/event/:id/comments',
+								element: <Comments />,
+								loader: commentLoader,
+								errorElement: <ErrorPage />,
+							}
+						]
 					}
 				]
 			},
