@@ -27,7 +27,7 @@ A project-based web application for browsing, creating, editing and commenting o
                 - Date and time of event
                 - Content of the event
                 - Possibility to register your own participation to the event
-                - Participants and number of participants:
+                - Number of participants:
                     - Participating
                     - Not participating
                     - Uncertain.
@@ -53,7 +53,7 @@ A project-based web application for browsing, creating, editing and commenting o
                 - Content of the event
                 - Public / Private
                 - Possibility to register your own participation to the event
-                - Participants and number of participants:
+                - Number of participants:
                     - Participating
                     - Not participating
                     - Uncertain.
@@ -67,7 +67,6 @@ A project-based web application for browsing, creating, editing and commenting o
                             - Cancel - cancel the editing of the event and return to the home page
                             - Reset - clears the form data.
                     - Delete an event
-                    - Invite other users to the event.
 
     - New event - opens a form with the following fields:
 
