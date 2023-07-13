@@ -138,7 +138,7 @@ li {
   button {
 	padding: 6px 10px;
 	background-color: #AEC3B0;
-	color: white;
+	color: #3b6371f1;
 	border: 1px solid #01161E;
 	border-radius: 4px;
 	cursor: pointer;
@@ -156,22 +156,25 @@ li {
 	cursor: not-allowed;
   }
   
-
-
 /* COMMENT BOX */
 
 .commentInputWrap {
 	margin-bottom: 15px;
 }
 
-.commentInput {
-
-}
-
-.commentBtn {
-
-}
-
+.eventDetailWrap label {
+	color: var(--background); 
+  }
+  
+  .eventDetailWrap p:nth-last-child(-n+3) {
+	padding:3px 0px 0px 2px;
+	color: var(--background); 
+  }
+  
+  .eventDetailWrap h3 {
+	color: var(--background); 
+  }
+  
 .commentWrapper {
 	border: 2px solid var(--text);
 	border-radius: 15px;
