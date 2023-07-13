@@ -185,6 +185,7 @@ function CreateEvent() {
 						value={date}
 						required
 						onChange={e => { setDate(e.target.value) }}
+						min={new Date().toISOString().split('T')[0]}
 					/>
 				</div>
 				<div className='form-group'>
