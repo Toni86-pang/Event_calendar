@@ -28,10 +28,10 @@ export function loader({ params }: any) {
 export default function Event() {
 	const id = useLoaderData() as string
 	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
-	const [userId, setUserId] = useState<number|undefined>(Number(localStorage.getItem('userId')))
+	const [userId, setUserId] = useState<number | undefined>(Number(localStorage.getItem('userId')))
 	const [attendance, setAttendance] = useState('')
 	const [submittedAttendance, setSubmittedAttendance] = useState(false)
-  
+
 	useEffect(() => {
 		const getEventInfo = async () => {
 			try {
@@ -43,8 +43,8 @@ export default function Event() {
 						}
 					})
 				} else {
-					response =  await fetch('/api/events/event/' + id)
-				}				
+					response = await fetch('/api/events/event/' + id)
+				}
 				const event = await response.json() as Event[]
 				if (event.length > 0) {
 					setCurrentEvent(event[0])
@@ -87,45 +87,45 @@ export default function Event() {
 			} catch (error) {
 				console.log('Error fetching participants:', error)
 			}
-			
+
 		}
 		getEventInfo()
 		setUserId(Number(localStorage.getItem('userId')))
 	}, [id])
 
-	
+
 	const handleAttendanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!submittedAttendance) {
-		setAttendance(event.target.value)
+			setAttendance(event.target.value)
 		}
 	}
-	
+
 	const handleAttendance = async (attendance: string) => {
 		if (!submittedAttendance) {
-		try {
-			const body = JSON.stringify({ attendance })
-			const headers = new Headers()
-			headers.append('Content-Type', 'application/json')
-	
-			await fetch(`/api/participants/event/${id}`, {
-			method: 'POST',
-			body,
-			headers,
-			})
-	
-			setCurrentEvent((prevEvent) => ({
-			...prevEvent!,
-			attendanceCount: {
-				...prevEvent!.attendanceCount!,
-				[attendance]: prevEvent!.attendanceCount![attendance] + 1,
-			},
-			}))
-	
-			setSubmittedAttendance(true)
-			console.log('Attendance updated successfully')
-		} catch (error) {
-			console.log('Error updating attendance:', error)
-		}
+			try {
+				const body = JSON.stringify({ attendance })
+				const headers = new Headers()
+				headers.append('Content-Type', 'application/json')
+
+				await fetch(`/api/participants/event/${id}`, {
+					method: 'POST',
+					body,
+					headers,
+				})
+
+				setCurrentEvent((prevEvent) => ({
+					...prevEvent!,
+					attendanceCount: {
+						...prevEvent!.attendanceCount!,
+						[attendance]: prevEvent!.attendanceCount![attendance] + 1,
+					},
+				}))
+
+				setSubmittedAttendance(true)
+				console.log('Attendance updated successfully')
+			} catch (error) {
+				console.log('Error updating attendance:', error)
+			}
 		}
 	}
 
@@ -137,63 +137,66 @@ export default function Event() {
 		const formattedTime = `${hours}:${minutes}`
 		return formattedDate + ' ' + formattedTime
 	}
-	
+
 	return (
 
 		<div>
-      <div className='eventDetailWrap'>
+			<div className='eventDetailWrap'>
 
-      <div className='contentWrap'>
-			  <h2>{currentEvent && currentEvent.title}</h2>
-		    <p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
-        <div className='contentText'>
-          <p>{currentEvent?.content}</p>
-        </div>
-			  {currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId:currentEvent?.event_id }}><button>Edit event</button></Link> : ''}
-      </div>
-			<p>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
+				<div className='contentWrap'>
+					<h2>{currentEvent && currentEvent.title}</h2>
+					<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
+					<div className='contentText'>
+						<p>{currentEvent?.content}</p>
+					</div>
+					{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId: currentEvent?.event_id }}><button>Edit event</button></Link> : ''}
+				</div>
+				<p style={{
+					color: '#AEC3B0',
+					marginTop: '10px'
+				}}>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
 			</div>
 
 			<div className='checkboxes'>
-        <h3>Attendance</h3>
-        <div className='attendanceOptions'>
-          <label>
-            <input
-              type='checkbox'
-              value='yes'
-              checked={attendance === 'yes'}
-              onChange={handleAttendanceChange}
-              disabled={attendance !== ''}
-            />
-            Yes
-          </label>
-          <label>
-            <input
-              type='checkbox'
-              value='no'
-              checked={attendance === 'no'}
-              onChange={handleAttendanceChange}
-              disabled={attendance !== ''}
-            />
-            No
-          </label>
-          <label>
-            <input
-              type='checkbox'
-              value='maybe'
-              checked={attendance === 'maybe'}
-              onChange={handleAttendanceChange}
-              disabled={attendance !== ''}
-            />
-            Maybe
-          </label>
-        </div>
-		<button onClick={() => handleAttendance(attendance)} 
-		disabled={attendance === '' || submittedAttendance}>
-  {submittedAttendance ? 'Attendance Submitted' : 'Submit Attendance'}
-</button>
+				<h3>Attendance</h3>
+				<div className='attendanceOptions'>
+					<label>
+						<input
+							type='checkbox'
+							value='yes'
+							checked={attendance === 'yes'}
+							onChange={handleAttendanceChange}
+							disabled={attendance !== ''}
+						/>
+						Yes
+					</label>
+					<label>
+						<input
+							type='checkbox'
+							value='no'
+							checked={attendance === 'no'}
+							onChange={handleAttendanceChange}
+							disabled={attendance !== ''}
+						/>
+						No
+					</label>
+					<label>
+						<input
+							type='checkbox'
+							value='maybe'
+							checked={attendance === 'maybe'}
+							onChange={handleAttendanceChange}
+							disabled={attendance !== ''}
+						/>
+						Maybe
+					</label>
+				</div>
+				<button onClick={() => handleAttendance(attendance)}
+					disabled={attendance === '' || submittedAttendance}>
+					{submittedAttendance ? 'Attendance Submitted' : 'Submit Attendance'}
+				</button>
 
-		</div>
+			</div>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
 			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
