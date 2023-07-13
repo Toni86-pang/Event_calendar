@@ -1,12 +1,20 @@
 /* eslint-disable indent */
 import './navbar.css'
 import { Link, Outlet, useNavigate} from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Nav() {
 	const [loggedIn, setLoggedIn] = useState(false)
 	const [userId, setUserId] = useState<number|null>(null)
 	
+  console.log(loggedIn)
+  useEffect(() => {
+    
+      if(localStorage.getItem('token')) setLoggedIn(true)
+      console.log(loggedIn)
+
+  }, [])
+
   const navigate = useNavigate()
 
   const handleDelete = async () => {
@@ -49,7 +57,7 @@ export default function Nav() {
 									: <Link className='navLink' to='/login'><button>Login</button></Link>
 				}
 			</nav>
-			<Outlet context={{setLoggedIn, setUserId}}/>
+			<Outlet context={{setLoggedIn, setUserId, loggedIn}}/>
 		</div>
 	)
 }
