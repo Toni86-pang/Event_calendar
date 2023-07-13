@@ -26,6 +26,7 @@ A project-based web application for browsing, creating, editing and commenting o
                 - The name of the event
                 - Date and time of event
                 - Content of the event
+                - Possibility to register your own participation to the event
                 - Participants and number of participants:
                     - Participating
                     - Not participating
@@ -51,6 +52,7 @@ A project-based web application for browsing, creating, editing and commenting o
                 - Date and time
                 - Content of the event
                 - Public / Private
+                - Possibility to register your own participation to the event
                 - Participants and number of participants:
                     - Participating
                     - Not participating
