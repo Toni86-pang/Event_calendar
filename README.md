@@ -19,6 +19,8 @@ A project-based web application for browsing, creating, editing and commenting o
 
     - Events - displays a list of upcoming events that are public:
 
+        - Search bar to search an event by name
+
         - A link with the event name, date and time.
             - Clicking on the link will take the user to the event details:
                 - The name of the event
@@ -40,6 +42,8 @@ A project-based web application for browsing, creating, editing and commenting o
 - Top bar with links ( Events, New event, Logout )
 
     - Events - Displays a list of events created by the logged-in user, as well as other public events
+
+        - Search bar to search an event by name
 
         - Link with event name, date and time.
             - Clicking on the link will take the user to the event details:
