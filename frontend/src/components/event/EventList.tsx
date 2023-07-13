@@ -24,7 +24,7 @@ const EventList = () => {
 	const [search, setSearch] = useState('')
 	const [events, setEvents] = useState<Event[]>([])
 	const [allEvents, setAllEvents] = useState<Event[]>([])
-	const [userId] = useState<number|undefined>(Number(localStorage.getItem('userId')))
+	const [userId] = useState<number | undefined>(Number(localStorage.getItem('userId')))
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value)
@@ -48,7 +48,7 @@ const EventList = () => {
 				const events = await response.json() as Array<Event>
 				setEvents(events)
 				setAllEvents(events)
-				
+
 			} catch (error) {
 				console.log('Error fetching event data:', error)
 			}
@@ -85,7 +85,7 @@ const EventList = () => {
 
 		return (
 			<li key={'event' + event.event_id + i}>
-				<Link className='eventLink' to={'event/' + event.event_id} state={{userId}}>
+				<Link className='eventLink' to={'event/' + event.event_id} state={{ userId }}>
 					<p className='linkDate'>
 						{formattedDateTime}
 					</p>
@@ -98,13 +98,13 @@ const EventList = () => {
 	})
 
 	const filterMyEvents = allEvents.filter(event => event.user_id === userId)
-	const myEvents = filterMyEvents.map( event => {
+	const myEvents = filterMyEvents.map(event => {
 		const formattedDateTime = formatDateTime(event.date_time)
 		const keyId = nanoid()
 
 		return (
 			<li key={keyId}>
-				<Link className='eventLink' to={'event/' + event.event_id } state={{userId}}>
+				<Link className='eventLink' to={'event/' + event.event_id} state={{ userId }}>
 					<p className='linkDate'>
 						{formattedDateTime}
 					</p>
@@ -122,12 +122,12 @@ const EventList = () => {
 			<div className='eventBrowser'>
 				<div className='leftColumn'>
 					<div className='eventsWrapper'>
-						<input onChange={handleChange} type='text'></input>
+						<input onChange={handleChange} type='text' placeholder='Type to search...'></input>
 						{myEvents.length > 0 ? <>
 							<h3>My events</h3>
 							<ul className='myEvents'>
-								{myEvents} 
-							</ul> 
+								{myEvents}
+							</ul>
 						</>
 							: <></>}
 						<h3>Upcoming events</h3>
