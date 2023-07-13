@@ -70,7 +70,7 @@ eventsRouter.delete('/event/:id', async (req: CustomRequest, res: Response) => {
 	await deleteEventById(eventId)
 	await deleteCommentByEventId(Number(eventId))
 	
-	res.send('event deleted')
+	res.send({data: 'event deleted'})
 })
 
 

@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { useLoaderData, Link } from 'react-router-dom'
+import { useLoaderData, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Comments from '../comments/Comments'
 
@@ -27,7 +27,8 @@ export function loader({ params }: any) {
 export default function Event() {
 	const id = useLoaderData() as string
 	const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
-	const [userId, setUserId] = useState<number|undefined>(Number(localStorage.getItem('userId')))
+	const [userId, setUserId] = useState<number | undefined>(Number(localStorage.getItem('userId')))
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		const getEventInfo = async () => {
@@ -40,8 +41,8 @@ export default function Event() {
 						}
 					})
 				} else {
-					response =  await fetch('/api/events/event/' + id)
-				}				
+					response = await fetch('/api/events/event/' + id)
+				}
 				const event = await response.json() as Event[]
 				if (event.length > 0) {
 					setCurrentEvent(event[0])
@@ -82,7 +83,7 @@ export default function Event() {
 			} catch (error) {
 				console.log('Error fetching participants:', error)
 			}
-			
+
 		}
 		getEventInfo()
 		setUserId(Number(localStorage.getItem('userId')))
@@ -96,14 +97,45 @@ export default function Event() {
 		const formattedTime = `${hours}:${minutes}`
 		return formattedDate + ' ' + formattedTime
 	}
-	
+
+	const isEventOwner = () => {
+		console.log('Eventpage userId: ', userId)
+		console.log('Eventpage event.userId: ', currentEvent?.user_id)
+		return userId === currentEvent?.user_id
+	}
+
+	const deleteEvent = async () => {
+		if (userId) {
+			const response = await fetch('/api/events/event/' + id, {
+				method: 'DELETE',
+				headers: {
+					'Authorization': `Bearer ${localStorage.getItem('token')}`,
+					'Content-Type': 'application/json'
+				},
+			})
+			console.log(response)
+			const data = response.json()
+			console.log(data)
+			navigate('/events')
+		}
+	}
+
+	const deleteButton = () => {
+		if (userId === currentEvent?.user_id) {
+			return (
+				<button onClick={deleteEvent}>Delete event</button>
+			)
+		}
+	}
+
 	return (
 
 		<div className='events'>
 			<h2>{currentEvent && currentEvent.title}</h2>
 			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
 			<p>{currentEvent?.content}</p>
-			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId:currentEvent?.event_id }}><button>Edit event</button></Link> : ''}
+			{isEventOwner() && <Link to={'/events/create'} state={{ eventId: currentEvent?.event_id }}><button>Edit event</button></Link>}
+			{isEventOwner() && deleteButton()}
 			<p>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
