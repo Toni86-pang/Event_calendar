@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable indent */
 import { useLoaderData, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -139,13 +140,18 @@ export default function Event() {
 	
 	return (
 
-		<div className='events'>
-			<div className='details'>
-			<h2>{currentEvent && currentEvent.title}</h2>
-			<p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
-			<p>{currentEvent?.content}</p>
-			{currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId:currentEvent?.event_id }}><button>Edit event</button></Link> : ''}
-			<p>{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
+		<div>
+      <div className='eventDetailWrap'>
+
+      <div className='contentWrap'>
+			  <h2>{currentEvent && currentEvent.title}</h2>
+		    <p>{currentEvent && formatDateTime(currentEvent.date_time)}</p>
+        <div className='contentText'>
+          <p>{currentEvent?.content}</p>
+        </div>
+			  {currentEvent?.user_id === userId ? <Link to={'/events/create'} state={{ eventId:currentEvent?.event_id }}><button>Edit event</button></Link> : ''}
+      </div>
+			<p >{currentEvent && (currentEvent.private ? 'Private' : 'Public')} event</p>
 			</div>
 
 			<div className='checkboxes'>
@@ -190,8 +196,7 @@ export default function Event() {
 		
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
-			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>	
-		
+			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>
 			<Comments />
 
 		</div>
