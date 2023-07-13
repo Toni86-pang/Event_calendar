@@ -91,4 +91,4 @@ A project-based web application for browsing, creating, editing and commenting o
 
 # Link to the website
 
-    - https://blue-project2.azurewebsites.net/
+- https://blue-project2.azurewebsites.net/
