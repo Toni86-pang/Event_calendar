@@ -115,6 +115,47 @@ li {
 	top: 40vh
 }
 
+.checkboxes {
+	margin-top: 20px;
+  }
+  
+  .attendanceOptions {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+  }
+  
+  .attendanceOptions label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+  }
+  
+  .attendanceOptions input[type='checkbox'] {
+	margin-right: 5px;
+  }
+  
+  button {
+	padding: 6px 10px;
+	background-color: #AEC3B0;
+	color: white;
+	border: 1px solid #01161E;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  button:hover {
+	background-color: #8FA899;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  button:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;
+  }
+  
 
 
 /* COMMENT BOX */

@@ -186,11 +186,12 @@ export default function Event() {
 		disabled={attendance === '' || submittedAttendance}>
   {submittedAttendance ? 'Attendance Submitted' : 'Submit Attendance'}
 </button>
-
 		</div>
+		
 			<p>Number of participants saying yes: {currentEvent && currentEvent.attendanceCount?.yesCount}</p>
 			<p>Number of participants saying no: {currentEvent && currentEvent.attendanceCount?.noCount}</p>
 			<p>Number of participants saying maybe: {currentEvent && currentEvent.attendanceCount?.maybeCount}</p>	
+		
 			<Comments />
 
 		</div>
