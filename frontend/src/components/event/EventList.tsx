@@ -123,10 +123,12 @@ const EventList = () => {
 				<div className='leftColumn'>
 					<div className='eventsWrapper'>
 						<input onChange={handleChange} type='text'></input>
-						<h3>My events</h3>
-						{myEvents.length > 0 ? <ul className='myEvents'>
-							{myEvents} 
-						</ul> 
+						{myEvents.length > 0 ? <>
+							<h3>My events</h3>
+							<ul className='myEvents'>
+								{myEvents} 
+							</ul> 
+						</>
 							: <></>}
 						<h3>Upcoming events</h3>
 						<ul className='eventList'>
