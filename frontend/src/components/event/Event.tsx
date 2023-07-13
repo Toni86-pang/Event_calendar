@@ -47,7 +47,7 @@ export default function Event() {
 	const [eventComments, setEventComments] = useState<Comment[] | null>(null)
 	const [comment, setComment] = useState('')
 	const [users, setUsers] = useState<Array<User> | null>(null)
-	const [userId, setUserId] = useState<number|undefined>()
+	const [userId, setUserId] = useState<number|undefined>(Number(localStorage.getItem('userId')))
 
 	useEffect(() => {
 		const getUsers = async () => {
@@ -74,8 +74,17 @@ export default function Event() {
 	useEffect(() => {
 		const getEventInfo = async () => {
 			try {
-				const eventResponse = await fetch('/api/events/event/' + id)
-				const event = await eventResponse.json() as Event[]
+				let response: Response
+				if (userId) {
+					response = await fetch('/api/events/event/' + id, {
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem('token')}`
+						}
+					})
+				} else {
+					response =  await fetch('/api/events/event/' + id)
+				}				
+				const event = await response.json() as Event[]
 				if (event.length > 0) {
 					setCurrentEvent(event[0])
 					console.log('All works')
