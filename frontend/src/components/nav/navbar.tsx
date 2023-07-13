@@ -1,13 +1,17 @@
 /* eslint-disable indent */
 import './navbar.css'
 import { Link, Outlet, useNavigate} from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Nav() {
 	const [loggedIn, setLoggedIn] = useState(false)
 	const [userId, setUserId] = useState<number|null>(null)
 	
   const navigate = useNavigate()
+
+  useEffect(() => {
+	if(!loggedIn) localStorage.clear()
+  },[loggedIn])
 
   const handleDelete = async () => {
     
